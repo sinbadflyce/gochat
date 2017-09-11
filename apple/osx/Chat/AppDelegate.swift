@@ -5,6 +5,7 @@ class AppDelegate: Application, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
 
+        Auth.shared.clearUser()
         EventBus.addListener(about: .connected, didReceive: { notification in
             if !Auth.shared.login() {
                 LoginViewController.popup()

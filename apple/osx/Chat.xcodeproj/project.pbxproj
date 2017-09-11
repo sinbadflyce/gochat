@@ -23,6 +23,8 @@
 		1ADE89EC1EA1CE0E00E41212 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ADE89EA1EA1CE0E00E41212 /* Main.storyboard */; };
 		1AF35A931EA30BFE002AFC3F /* TextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF35A921EA30BFE002AFC3F /* TextViewController.swift */; };
 		1AF35A951EA30C34002AFC3F /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF35A941EA30C34002AFC3F /* ContactsViewController.swift */; };
+		8544420D1F5FEE11001FB71E /* Webview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8544420C1F5FEE11001FB71E /* Webview.xib */; };
+		8544420F1F5FEEAF001FB71E /* AuthenticationWebview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */; };
 		859B2CC31F4FFDAB006C4E79 /* MSAL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 859B2CBD1F4FFC27006C4E79 /* MSAL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		859B2CCA1F5009BF006C4E79 /* OfficeAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B2CC91F5009BF006C4E79 /* OfficeAuthentication.swift */; };
 		D4C11B8E12CA4AE1016CA052 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3DC7F985F75CB41DAED56C7 /* Pods_Chat.framework */; };
@@ -102,6 +104,8 @@
 		1AF35A921EA30BFE002AFC3F /* TextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
 		1AF35A941EA30C34002AFC3F /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		64A385B4166E340653D3B04C /* Pods-Chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.release.xcconfig"; sourceTree = "<group>"; };
+		8544420C1F5FEE11001FB71E /* Webview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Webview.xib; sourceTree = "<group>"; };
+		8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationWebview.swift; sourceTree = "<group>"; };
 		859B2CBD1F4FFC27006C4E79 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = Carthage/Build/Mac/MSAL.framework; sourceTree = "<group>"; };
 		859B2CC91F5009BF006C4E79 /* OfficeAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAuthentication.swift; sourceTree = "<group>"; };
 		931CB699F7145BBD7B223700 /* Pods-Chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.debug.xcconfig"; sourceTree = "<group>"; };
@@ -205,6 +209,8 @@
 				E5C6FB871F3971B400B84B0B /* OutgoingCallViewController.swift */,
 				E5C6FB881F3971B400B84B0B /* SettingsViewController.swift */,
 				E5C6FB891F3971B400B84B0B /* VideoViewController.swift */,
+				8544420C1F5FEE11001FB71E /* Webview.xib */,
+				8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -384,6 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1ADE89E91EA1CE0E00E41212 /* Assets.xcassets in Resources */,
+				8544420D1F5FEE11001FB71E /* Webview.xib in Resources */,
 				1ADE89EC1EA1CE0E00E41212 /* Main.storyboard in Resources */,
 				1AC51C551EE5ED2300681864 /* Login.xib in Resources */,
 			);
@@ -487,6 +494,7 @@
 				1A60DFF51EA30FC900BECD73 /* Wire.proto.swift in Sources */,
 				E575EFC01F345F1100F2DA8B /* AudioInput.swift in Sources */,
 				E575EFDF1F345F8F00F2DA8B /* Protobuf.swift in Sources */,
+				8544420F1F5FEEAF001FB71E /* AuthenticationWebview.swift in Sources */,
 				859B2CCA1F5009BF006C4E79 /* OfficeAuthentication.swift in Sources */,
 				E5CD23881F3AB80900937C44 /* NetworkAudio.swift in Sources */,
 				E575EFBF1F345F1100F2DA8B /* AudioDecoder.swift in Sources */,

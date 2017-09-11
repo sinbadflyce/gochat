@@ -54,7 +54,6 @@ class Auth {
     
     func loginWithOffice() {
         OfficeAuthentication.shared.login { (nickName) in
-            // Use user's uid for password field
             self.password = nickName
             self.username = nickName
             self.token = OfficeAuthentication.shared.accessToken
@@ -80,8 +79,9 @@ class Auth {
             loginBuilder.setAuthenToken(token!)
         }
         
-        // fake device token
-        loginBuilder.setDeviceToken("abcd")
+        if let deviceToken = UserDefaults.standard.string(forKey: Constant.kDeviceTokenKey) {
+            loginBuilder.setDeviceToken(deviceToken)
+        }
         
         do {
             let login = try loginBuilder.build()

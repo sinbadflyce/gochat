@@ -24,6 +24,8 @@
 		1AB062131E8843E600A841D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AB062111E8843E600A841D0 /* Main.storyboard */; };
 		1AB062151E8843E600A841D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AB062141E8843E600A841D0 /* Assets.xcassets */; };
 		66C4B5946A64F209719F1358 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ACBFB437F9424A73A5B0830 /* Pods_Chat.framework */; };
+		851BE4311F666F5E005ACC29 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 851BE4301F666F5E005ACC29 /* UserNotifications.framework */; };
+		851BE4331F6670E5005ACC29 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851BE4321F6670E5005ACC29 /* Constant.swift */; };
 		85255F1D1F4AE15C00576B07 /* MSAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85255F1C1F4AE15C00576B07 /* MSAL.framework */; };
 		85621CA31F56671A007351CB /* OfficeAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85621CA21F56671A007351CB /* OfficeAuthentication.swift */; };
 		E5CD23511F3AB79200937C44 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CD23461F3AB79200937C44 /* Audio.swift */; };
@@ -89,6 +91,9 @@
 		1AB062121E8843E600A841D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1AB062141E8843E600A841D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AB062191E8843E600A841D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		851BE42F1F666C7F005ACC29 /* Chat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chat.entitlements; sourceTree = "<group>"; };
+		851BE4301F666F5E005ACC29 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		851BE4321F6670E5005ACC29 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		85255F1C1F4AE15C00576B07 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = Carthage/Build/iOS/MSAL.framework; sourceTree = "<group>"; };
 		85621CA21F56671A007351CB /* OfficeAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAuthentication.swift; sourceTree = "<group>"; };
 		C5A48039D30C2E9ECC041BE6 /* Pods-Chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.release.xcconfig"; sourceTree = "<group>"; };
@@ -140,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				851BE4311F666F5E005ACC29 /* UserNotifications.framework in Frameworks */,
 				85255F1D1F4AE15C00576B07 /* MSAL.framework in Frameworks */,
 				66C4B5946A64F209719F1358 /* Pods_Chat.framework in Frameworks */,
 			);
@@ -151,6 +157,7 @@
 		0C77C729FA3A62CBB1C5806F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				851BE4301F666F5E005ACC29 /* UserNotifications.framework */,
 				85255F1C1F4AE15C00576B07 /* MSAL.framework */,
 				0ACBFB437F9424A73A5B0830 /* Pods_Chat.framework */,
 			);
@@ -204,6 +211,7 @@
 				1A709A4D1EEF8837003C2699 /* Wire.proto.swift */,
 				E5CD23981F3AB8D900937C44 /* AV.swift */,
 				E5CD23991F3AB8D900937C44 /* Types.swift */,
+				851BE4321F6670E5005ACC29 /* Constant.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -229,6 +237,7 @@
 		1AB0620A1E8843E500A841D0 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				851BE42F1F666C7F005ACC29 /* Chat.entitlements */,
 				1AB0620B1E8843E500A841D0 /* AppDelegate.swift */,
 				1A709A4B1EEF29F8003C2699 /* Common */,
 				1A709A421EEEF10A003C2699 /* UI */,
@@ -347,6 +356,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -482,6 +496,7 @@
 				E5CD23511F3AB79200937C44 /* Audio.swift in Sources */,
 				E5CD23A61F3ABFF000937C44 /* UIKit.swift in Sources */,
 				1A43D8171F3822F8004A8C8A /* Auth.swift in Sources */,
+				851BE4331F6670E5005ACC29 /* Constant.swift in Sources */,
 				1AB0620E1E8843E500A841D0 /* MasterViewController.swift in Sources */,
 				E5CD23541F3AB79200937C44 /* AudioOutput.swift in Sources */,
 				E5CD23B41F3AC16D00937C44 /* Application.swift in Sources */,
@@ -634,8 +649,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 5KH4V6747U;
+				DEVELOPMENT_TEAM = H4C7478UQW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -660,8 +676,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 5KH4V6747U;
+				DEVELOPMENT_TEAM = H4C7478UQW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

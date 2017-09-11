@@ -1,6 +1,7 @@
 import UIKit
 import AVFoundation
 import MSAL
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: Application, UIApplicationDelegate, UISplitViewControllerDelegate {
@@ -32,6 +33,14 @@ class AppDelegate: Application, UIApplicationDelegate, UISplitViewControllerDele
             logIOError(error)
         }
 
+        // Notification
+        if #available(iOS 10, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound], completionHandler: { (granted, error) in
+                
+            })
+            application.registerForRemoteNotifications()
+        }
+        
         // done
 
         return true
@@ -64,5 +73,22 @@ class AppDelegate: Application, UIApplicationDelegate, UISplitViewControllerDele
             return true
         }
         return false
+    }
+    
+    // Called when APNs has assigned the device a unique token
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Convert token to string
+        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        
+        // Print it to console
+        print("APNs device token: \(deviceTokenString)")
+        UserDefaults.standard.set(deviceTokenString, forKey: Constant.kDeviceTokenKey)
+    }
+    
+    // Called when APNs failed to register the device for push notifications
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Print the error to console (you should alert the user that registration failed)
+        print("APNs registration failed: \(error)")
+        UserDefaults.standard.set(nil, forKey: Constant.kDeviceTokenKey)
     }
 }

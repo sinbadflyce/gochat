@@ -8,6 +8,7 @@
 
 import Foundation
 import JWTDecode
+import MSAL
 
 class OfficeAuthentication: NSObject, URLSessionDelegate {
     

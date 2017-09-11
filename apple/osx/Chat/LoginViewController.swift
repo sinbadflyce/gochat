@@ -26,6 +26,11 @@ class LoginViewController : NSWindowController {
         // Xcode8 compiler
         // shared = LoginViewController(windowNibName: NSNib.Name(rawValue: "Login"))
         shared = LoginViewController(windowNibName: "Login")
+        
+        EventBus.addListener(about: .authenticated) { (_) in
+            shared?.loginWindow.close()
+        }
+        
         shared?.showWindow(nil)
         shared?.loginWindow.makeKey()
     }
