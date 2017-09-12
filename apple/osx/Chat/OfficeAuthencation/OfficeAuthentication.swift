@@ -18,8 +18,8 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
 
     // Constants
     
-    let kClientID = "d6a01562-2f48-4634-a4e2-0676e57598de"
-    let kSecret = "viH8zWm1FCH6cj01bqe9N25"
+    let kClientID = "044e6315-8adc-4dce-9e8e-d9c4d8fef806"
+    let kSecret = "6Cch3itUFAtKjFxfOAKypnR"
     let kAuthority = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
     let kTokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
     let kResource = "https://graph.windows.net"
@@ -32,7 +32,7 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
     
     var account: NXOAuth2Account? {
         get {
-            return (NXOAuth2AccountStore.sharedStore() as? NXOAuth2AccountStore)?.accounts.first as? NXOAuth2Account
+            return (NXOAuth2AccountStore.sharedStore() as? NXOAuth2AccountStore)?.accounts.last as? NXOAuth2Account
         }
     }
     
@@ -82,7 +82,9 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
     
     func signout() {
         if account != nil {
-            (NXOAuth2AccountStore.sharedStore() as? NXOAuth2AccountStore)?.removeAccount(account)
+            (NXOAuth2AccountStore.sharedStore() as? NXOAuth2AccountStore)?.accounts.forEach({
+                (NXOAuth2AccountStore.sharedStore() as? NXOAuth2AccountStore)?.removeAccount($0 as! NXOAuth2Account)
+            })
         }
     }
     
@@ -104,9 +106,7 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
                 print(error.localizedDescription)
             } else {
                 print("Success!! We have an access token.")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: { 
-                    self.getUserInfo()
-                })
+                self.getUserInfo()
             }
         }
     }
@@ -193,7 +193,7 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
             if result != nil, let dict = result as? [String: AnyObject] {
                 print(dict)
                 if let email = dict["userPrincipalName"] as? String {
-                    let patern = "@[A-Za-z]++\\.[A-Za-z]++$"
+                    let patern = "@[A-Za-z]++\\.(.)++$"
                     var username = email
                     if self.matches(for: patern, in: username).count > 0 {
                         username = username.replacingOccurrences(of: patern, with: "", options: .regularExpression, range: nil)
