@@ -26,7 +26,6 @@
 		852299891F678E920024EEF4 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852299881F678E920024EEF4 /* Constant.swift */; };
 		8544420D1F5FEE11001FB71E /* Webview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8544420C1F5FEE11001FB71E /* Webview.xib */; };
 		8544420F1F5FEEAF001FB71E /* AuthenticationWebview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */; };
-		859B2CC31F4FFDAB006C4E79 /* MSAL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 859B2CBD1F4FFC27006C4E79 /* MSAL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		859B2CCA1F5009BF006C4E79 /* OfficeAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B2CC91F5009BF006C4E79 /* OfficeAuthentication.swift */; };
 		D4C11B8E12CA4AE1016CA052 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3DC7F985F75CB41DAED56C7 /* Pods_Chat.framework */; };
 		E575EFBE1F345F1100F2DA8B /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E575EFB31F345F1100F2DA8B /* Audio.swift */; };
@@ -77,7 +76,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				859B2CC31F4FFDAB006C4E79 /* MSAL.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,7 +106,6 @@
 		852299881F678E920024EEF4 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = ../../common/Constant.swift; sourceTree = "<group>"; };
 		8544420C1F5FEE11001FB71E /* Webview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Webview.xib; sourceTree = "<group>"; };
 		8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationWebview.swift; sourceTree = "<group>"; };
-		859B2CBD1F4FFC27006C4E79 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = Carthage/Build/Mac/MSAL.framework; sourceTree = "<group>"; };
 		859B2CC91F5009BF006C4E79 /* OfficeAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAuthentication.swift; sourceTree = "<group>"; };
 		931CB699F7145BBD7B223700 /* Pods-Chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.debug.xcconfig"; sourceTree = "<group>"; };
 		E575EFB31F345F1100F2DA8B /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
@@ -252,7 +249,6 @@
 		485B0DEBAC60AE9E9504DBAB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				859B2CBD1F4FFC27006C4E79 /* MSAL.framework */,
 				F3DC7F985F75CB41DAED56C7 /* Pods_Chat.framework */,
 			);
 			name = Frameworks;
@@ -655,10 +651,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -681,10 +674,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (

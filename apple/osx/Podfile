@@ -6,8 +6,8 @@ target 'Chat' do
   pod 'ProtocolBuffers-Swift', :inhibit_warnings => true
   pod 'themis', :podspec => 'https://raw.githubusercontent.com/cossacklabs/themis/master/themis.podspec', :inhibit_warnings => true
   pod 'JWTDecode'
-  pod 'ADAL'
-  pod 'NXOAuth2Client'
+  pod 'ADAL', :inhibit_warnings => true
+  pod 'NXOAuth2Client', :inhibit_warnings => true
 end
 
 # Only work pod 1.3.1 or later
