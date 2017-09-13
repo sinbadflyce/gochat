@@ -5,6 +5,7 @@ class WireBackend {
 
     static let shared = WireBackend()
     private let network = Network()
+    private let udpNetwork = UDPNetwork()
     private var sessionId: String?
     private var crypto: Crypto?
     private var queues = [String:[Hold]]()
@@ -12,6 +13,7 @@ class WireBackend {
     
     func connect() {
         network.connect()
+        udpNetwork.connect()
     }
 
     private func send(_ wireBuilder: Wire.Builder) {
@@ -26,6 +28,18 @@ class WireBackend {
         }
     }
 
+    private func udpSend(_ wireBuilder: Wire.Builder) {
+        do {
+            var annotated = wireBuilder
+            if let sessionId = sessionId {
+                annotated = annotated.setSessionId(sessionId)
+            }
+            udpNetwork.send(try annotated.build().data())
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     // encryption handshake
 
     func sendPublicKey(_ localPublicKey: Data, to: String, isResponse: Bool) {
@@ -55,6 +69,11 @@ class WireBackend {
         }
     }
 
+    func sendUDPEstablished(sessionId: String) {
+        let wire = Wire.Builder().setWhich(.udpEstablished).setSessionId(sessionId)
+        udpSend(wire)
+    }
+    
     // queue messages while waiting for handshake to complete
 
     struct Hold {
@@ -142,6 +161,7 @@ class WireBackend {
         Auth.shared.save()
         crypto = Crypto(password: Auth.shared.password!)
         EventBus.post(.authenticated)
+        sendUDPEstablished(sessionId: sessionId)
     }
 
     func sendContacts(_ contacts: [Contact]) {

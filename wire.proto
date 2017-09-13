@@ -39,6 +39,7 @@ message Wire {
 	    HANDSHAKE = 7;
 	    PAYLOAD = 8;
         LOGIN_RESPONSE = 9;
+        UDP_ESTABLISHED = 10;
     }
     Which which = 5;
 

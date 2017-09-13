@@ -3,6 +3,7 @@ PODS:
     - ADAL/app-lib (= 2.4.1)
   - ADAL/app-lib (2.4.1):
     - ADAL/tokencacheheader
+  - CocoaAsyncSocket (7.6.1)
   - JWTDecode (2.0.0)
   - NXOAuth2Client (1.2.8)
   - OpenSSL-Universal (1.0.1.20)
@@ -20,6 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - ADAL
+  - CocoaAsyncSocket
   - JWTDecode
   - NXOAuth2Client
   - ProtocolBuffers-Swift
@@ -40,6 +42,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   ADAL: 37e72fb9046333d4eccf785e5a47203381618539
+  CocoaAsyncSocket: 7eadd3f59e1a6c84e2aefc93e9ff7b55156fe174
   JWTDecode: 178e47e5d28d3abcff778bacced8342858cd6cb5
   NXOAuth2Client: 98c4d4c594edd2b289cfc34a8928653e1dab7adf
   OpenSSL-Universal: 71f2c4b2ae758e2218090f905e95ca0ac5c01be7
@@ -47,6 +50,6 @@ SPEC CHECKSUMS:
   Starscream: d662732354b40dd19ed1ece3e3c44c80b536b83c
   themis: 1cf1e1caaea7286cf4eeb9e4da1a7a16a5cb4a31
 
-PODFILE CHECKSUM: 29b4b656e57c7504861ce61d3391d9fd80394182
+PODFILE CHECKSUM: bdf755024f53699a044aee1296250c5f724484f3
 
 COCOAPODS: 1.3.1

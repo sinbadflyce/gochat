@@ -2,34 +2,38 @@ package main
 
 import (
 	"fmt"
-	"github.com/boltdb/bolt"
-	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/websocket"
 	"log"
 	"net"
 	"net/http"
+
+	"github.com/boltdb/bolt"
+	"github.com/golang/protobuf/proto"
+	"github.com/gorilla/websocket"
 )
 
 //global variable for handling all chat traffic
 var crowd Crowd
 
-// websocket
+// UDPServer ...
+var udpServer UDPServer
 
+// websocket
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin:     func(r *http.Request) bool { return true }, //not checking origin
 }
 
+// connected fire
 func connected(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\nNew connection\n")
+	fmt.Println("\nNew connection")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println("Error upgrading to websocket:", err)
 		return
 	}
 
-	sessionId := ""
+	sessionID := ""
 	ok := true
 
 	go func() {
@@ -37,8 +41,8 @@ func connected(w http.ResponseWriter, r *http.Request) {
 		for {
 			_, data, err := conn.ReadMessage()
 			if err != nil {
-				fmt.Println("\nConnection closed for session " + sessionId)
-				crowd.updatePresence(sessionId, false)
+				fmt.Println("\nConnection closed for session " + sessionID)
+				crowd.updatePresence(sessionID, false)
 				return
 			}
 
@@ -49,7 +53,7 @@ func connected(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			sessionId, ok = crowd.messageArrived(conn, wire, sessionId)
+			sessionID, ok = crowd.messageArrived(conn, wire, sessionID)
 			if !ok {
 				fmt.Println("\nReceived error, stop loop")
 				return
@@ -91,6 +95,7 @@ func main() {
 	printClientConnInfo()
 	http.HandleFunc("/ws", connected)
 	crowd.Init(db)
+	go udpServer.Start()
 	http.ListenAndServe(":8000", nil)
 	defer db.Close()
 }

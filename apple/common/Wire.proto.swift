@@ -1024,6 +1024,7 @@ final public class Wire : GeneratedMessage {
             case handshake = 7
             case payload = 8
             case loginResponse = 9
+            case udpEstablished = 10
             public func toString() -> String {
                 switch self {
                 case .login: return "LOGIN"
@@ -1036,6 +1037,7 @@ final public class Wire : GeneratedMessage {
                 case .handshake: return "HANDSHAKE"
                 case .payload: return "PAYLOAD"
                 case .loginResponse: return "LOGIN_RESPONSE"
+                case .udpEstablished: return "UDP_ESTABLISHED"
                 }
             }
             public static func fromString(_ str:String) throws -> Wire.Which {
@@ -1050,6 +1052,7 @@ final public class Wire : GeneratedMessage {
                 case "HANDSHAKE":    return .handshake
                 case "PAYLOAD":    return .payload
                 case "LOGIN_RESPONSE":    return .loginResponse
+                case "UDP_ESTABLISHED":    return .udpEstablished
                 default: throw ProtocolBuffersError.invalidProtocolBuffer("Conversion failed.")
                 }
             }
@@ -1067,6 +1070,7 @@ final public class Wire : GeneratedMessage {
                 case .handshake: return ".handshake"
                 case .payload: return ".payload"
                 case .loginResponse: return ".loginResponse"
+                case .udpEstablished: return ".udpEstablished"
                 }
             }
             public var hashValue:Int {
