@@ -22,6 +22,13 @@ class LoginViewController : NSWindowController {
         Auth.shared.loginWithOffice()
     }
     
+    override func awakeFromNib() {
+        #if DEBUG
+            self.password.stringValue = "xxx"
+            self.username.stringValue = "minh"
+        #endif
+    }
+    
     static func popup() {
         // Xcode8 compiler
         // shared = LoginViewController(windowNibName: NSNib.Name(rawValue: "Login"))

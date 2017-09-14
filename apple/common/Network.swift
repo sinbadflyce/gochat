@@ -56,10 +56,12 @@ class UDPNetwork: NSObject {
         
         do {
             try udpSocket?.connect(toHost: UDPNetwork.host, onPort: UDPNetwork.port)
+            try udpSocket?.beginReceiving()
         } catch  {
             print(error)
             self.udpSocket = nil
         }
+        
     }
     
     func send(_ data: Data) {
@@ -88,7 +90,8 @@ extension UDPNetwork: GCDAsyncUdpSocketDelegate {
     
     func udpSocket(
         _ sock: GCDAsyncUdpSocket, didReceive data: Data, fromAddress address: Data, withFilterContext filterContext: Any?) {
-        let saddr = String.init(data: address, encoding: String.Encoding.utf8)
-        print("UDP didReceive from address \(String(describing: saddr))")
+        
+        print("UDP didReceive \(data.count) from server")
+        WireBackend.shared.didReceiveFromServer(data)
     }
 }

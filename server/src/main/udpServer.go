@@ -9,13 +9,17 @@ import (
 
 // UDPServer ...
 type UDPServer struct {
-	crowd *UDPCrowd
-	conn  *net.UDPConn
+	udpCrowd *UDPCrowd
+	conn     *net.UDPConn
+	buffer   []byte
 }
 
 // Start ...
-func (server *UDPServer) Start() {
-	server.crowd = new(UDPCrowd)
+func (server *UDPServer) Start(tcpCrowd *Crowd) {
+	server.udpCrowd = new(UDPCrowd)
+	server.udpCrowd.tcpCrowd = tcpCrowd
+	server.udpCrowd.Init()
+	server.buffer = make([]byte, 2048)
 
 	//Build the address
 	udpAddr, err := net.ResolveUDPAddr("udp", ":8001")
@@ -38,28 +42,52 @@ func (server *UDPServer) Start() {
 
 // HandleReadData ...
 func (server *UDPServer) HandleReadData() {
-	buf := make([]byte, 1024)
 
+	// loop to read data
 	for {
-		n, err := server.conn.Read(buf[0:])
 
+		// read
+		n, addr, err := server.conn.ReadFromUDP(server.buffer[0:])
+
+		// error
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
+		// bytes are read
 		fmt.Printf("UDP server received bytes lenght: %d\n", n)
 
-		wire := &Wire{}
-		err = proto.Unmarshal(buf, wire)
+		// copy
+		readBuf := make([]byte, n)
+		copy(readBuf, server.buffer)
 
+		// convert to wire
+		wire := &Wire{}
+		err = proto.Unmarshal(readBuf, wire)
+
+		// error
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
-		if wire.Which == Wire_LOGIN {
-
-		}
+		// fallback to udp crowd
+		server.udpCrowd.MessageArrived(addr, server.conn, wire)
 	}
+}
+
+// CloseClient ...
+func (server *UDPServer) CloseClient(peerName string) {
+
+	// peer client is available
+	_, ok := server.udpCrowd.clients[peerName]
+
+	// error
+	if !ok {
+		fmt.Printf("No client with sessionId = %s\n", peerName)
+	}
+
+	// remove
+	server.udpCrowd.clients[peerName] = nil
 }

@@ -95,7 +95,7 @@ func main() {
 	printClientConnInfo()
 	http.HandleFunc("/ws", connected)
 	crowd.Init(db)
-	go udpServer.Start()
+	go udpServer.Start(&crowd)
 	http.ListenAndServe(":8000", nil)
 	defer db.Close()
 }

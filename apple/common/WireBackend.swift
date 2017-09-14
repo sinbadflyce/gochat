@@ -69,8 +69,8 @@ class WireBackend {
         }
     }
 
-    func sendUDPEstablished(sessionId: String) {
-        let wire = Wire.Builder().setWhich(.udpEstablished).setSessionId(sessionId)
+    func sendUDPEstablished(sessionId: String, from: String) {
+        let wire = Wire.Builder().setWhich(.udpEstablished).setSessionId(sessionId).setFrom(from)
         udpSend(wire)
     }
     
@@ -161,7 +161,7 @@ class WireBackend {
         Auth.shared.save()
         crypto = Crypto(password: Auth.shared.password!)
         EventBus.post(.authenticated)
-        sendUDPEstablished(sessionId: sessionId)
+        sendUDPEstablished(sessionId: sessionId!, from: Auth.shared.username!)
     }
 
     func sendContacts(_ contacts: [Contact]) {
@@ -177,6 +177,14 @@ class WireBackend {
         }
     }
 
+    func udpSend(data: Data, peerId: String) {
+        if crypto!.isSessionEstablished(peerId: peerId) {
+            encryptAndUdpSend(data: data, peerId: peerId)
+        } else {
+            enqueue(data: data, peerId: peerId)
+        }
+    }
+    
     private func encryptAndSend(data: Data, peerId: String) {
         guard let encrypted = crypto?.encrypt(data: data, peerId: peerId) else {
             print("encryption failed")
@@ -185,4 +193,14 @@ class WireBackend {
         let payloadBuilder = Wire.Builder().setPayload(encrypted).setWhich(.payload).setTo(peerId)
         send(payloadBuilder)
     }
+    
+    private func encryptAndUdpSend(data: Data, peerId: String) {
+        guard let encrypted = crypto?.encrypt(data: data, peerId: peerId) else {
+            print("encryption failed")
+            return
+        }
+        let payloadBuilder = Wire.Builder().setPayload(encrypted).setWhich(.payload).setTo(peerId)
+        udpSend(payloadBuilder)
+    }
+
 }

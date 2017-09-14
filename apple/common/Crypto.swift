@@ -140,9 +140,14 @@ private class Peer {
     }
 
     func didReceive(_ data: Data) {
+        
+        guard let s =  session else {
+            return
+        }
+        
         print("status is \(status)")
         do {
-            let decryptedMessage = try session!.unwrapData(data)
+            let decryptedMessage = try s.unwrapData(data)
             if !session!.isSessionEstablished() { // themis says: send this back
                 print("themis says: send this back")
                 WireBackend.shared.sendHandshake(message: decryptedMessage, to: peerId)

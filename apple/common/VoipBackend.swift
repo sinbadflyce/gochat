@@ -22,6 +22,15 @@ class VoipBackend {
         }
     }
 
+    static func udpSendText(_ body: String, peerId: String) {
+        do {
+            let data = try Voip.Builder().setWhich(.text).setPayload(body.data(using: .utf8)!).build().data()
+            WireBackend.shared.udpSend(data: data, peerId: peerId)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     static func didReceiveFromPeer(_ data: Data, from peerId: String) {
         guard let voip = try? Voip.parseFrom(data:data) else {
             print("Could not deserialize voip")
