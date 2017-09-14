@@ -16,7 +16,7 @@ class VoipBackend {
     static func sendText(_ body: String, peerId: String) {
         do {
             let data = try Voip.Builder().setWhich(.text).setPayload(body.data(using: .utf8)!).build().data()
-            WireBackend.shared.send(data: data, peerId: peerId)            
+            WireBackend.shared.sendMessage(data: data, peerId: peerId)
         } catch {
             print(error.localizedDescription)
         }

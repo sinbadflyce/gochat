@@ -80,11 +80,12 @@ class Auth {
         }
         
         
-        // fake
-        loginBuilder.setDeviceToken("abcd")
-//        if let deviceToken = UserDefaults.standard.string(forKey: Constant.kDeviceTokenKey) {
-//            loginBuilder.setDeviceToken(deviceToken)
-//        }
+        if let deviceToken = UserDefaults.standard.string(forKey: Constant.kDeviceTokenKey) {
+            loginBuilder.setDeviceToken(deviceToken)
+        } else {
+            // fake
+            loginBuilder.setDeviceToken("abcd")
+        }
         
         do {
             let login = try loginBuilder.build()

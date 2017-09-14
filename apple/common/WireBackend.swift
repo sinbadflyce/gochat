@@ -156,6 +156,18 @@ class WireBackend {
             enqueue(data: data, peerId: peerId)
         }
     }
+    
+    func sendMessage(data: Data, peerId: String) {
+        if crypto!.isSessionEstablished(peerId: peerId), let plainTextBuilder = try? PlainText.Builder().setType(1).setContent("New a message").build() {
+            if let encrypted = crypto?.encrypt(data: data, peerId: peerId) {
+                let payloadBuilder = Wire.Builder().setPayload(encrypted).setWhich(.plainText).setTo(peerId).setPlainText(plainTextBuilder)
+                send(payloadBuilder)
+            }
+        } else {
+            // TODO: add into queue with PlainText
+            enqueue(data: data, peerId: peerId)
+        }
+    }
 
     private func encryptAndSend(data: Data, peerId: String) {
         guard let encrypted = crypto?.encrypt(data: data, peerId: peerId) else {

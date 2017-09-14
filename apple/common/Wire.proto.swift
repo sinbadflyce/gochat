@@ -987,6 +987,277 @@ final public class Login : GeneratedMessage {
 
 }
 
+final public class PlainText : GeneratedMessage {
+    public typealias BuilderType = PlainText.Builder
+
+    public static func == (lhs: PlainText, rhs: PlainText) -> Bool {
+        if lhs === rhs {
+            return true
+        }
+        var fieldCheck:Bool = (lhs.hashValue == rhs.hashValue)
+        fieldCheck = fieldCheck && (lhs.hasType == rhs.hasType) && (!lhs.hasType || lhs.type == rhs.type)
+        fieldCheck = fieldCheck && (lhs.hasContent == rhs.hasContent) && (!lhs.hasContent || lhs.content == rhs.content)
+        fieldCheck = (fieldCheck && (lhs.unknownFields == rhs.unknownFields))
+        return fieldCheck
+    }
+
+    public fileprivate(set) var type:UInt32! = nil
+    public fileprivate(set) var hasType:Bool = false
+
+    public fileprivate(set) var content:String! = nil
+    public fileprivate(set) var hasContent:Bool = false
+
+    required public init() {
+        super.init()
+    }
+    override public func isInitialized() -> Bool {
+        return true
+    }
+    override public func writeTo(codedOutputStream: CodedOutputStream) throws {
+        if hasType {
+            try codedOutputStream.writeUInt32(fieldNumber: 1, value:type)
+        }
+        if hasContent {
+            try codedOutputStream.writeString(fieldNumber: 2, value:content)
+        }
+        try unknownFields.writeTo(codedOutputStream: codedOutputStream)
+    }
+    override public func serializedSize() -> Int32 {
+        var serialize_size:Int32 = memoizedSerializedSize
+        if serialize_size != -1 {
+         return serialize_size
+        }
+
+        serialize_size = 0
+        if hasType {
+            serialize_size += type.computeUInt32Size(fieldNumber: 1)
+        }
+        if hasContent {
+            serialize_size += content.computeStringSize(fieldNumber: 2)
+        }
+        serialize_size += unknownFields.serializedSize()
+        memoizedSerializedSize = serialize_size
+        return serialize_size
+    }
+    public class func getBuilder() -> PlainText.Builder {
+        return PlainText.classBuilder() as! PlainText.Builder
+    }
+    public func getBuilder() -> PlainText.Builder {
+        return classBuilder() as! PlainText.Builder
+    }
+    override public class func classBuilder() -> ProtocolBuffersMessageBuilder {
+        return PlainText.Builder()
+    }
+    override public func classBuilder() -> ProtocolBuffersMessageBuilder {
+        return PlainText.Builder()
+    }
+    public func toBuilder() throws -> PlainText.Builder {
+        return try PlainText.builderWithPrototype(prototype:self)
+    }
+    public class func builderWithPrototype(prototype:PlainText) throws -> PlainText.Builder {
+        return try PlainText.Builder().mergeFrom(other:prototype)
+    }
+    override public func encode() throws -> Dictionary<String,Any> {
+        guard isInitialized() else {
+            throw ProtocolBuffersError.invalidProtocolBuffer("Uninitialized Message")
+        }
+
+        var jsonMap:Dictionary<String,Any> = Dictionary<String,Any>()
+        if hasType {
+            jsonMap["type"] = UInt(type)
+        }
+        if hasContent {
+            jsonMap["content"] = content
+        }
+        return jsonMap
+    }
+    override class public func decode(jsonMap:Dictionary<String,Any>) throws -> PlainText {
+        return try PlainText.Builder.decodeToBuilder(jsonMap:jsonMap).build()
+    }
+    override class public func fromJSON(data:Data) throws -> PlainText {
+        return try PlainText.Builder.fromJSONToBuilder(data:data).build()
+    }
+    override public func getDescription(indent:String) throws -> String {
+        var output = ""
+        if hasType {
+            output += "\(indent) type: \(type) \n"
+        }
+        if hasContent {
+            output += "\(indent) content: \(content) \n"
+        }
+        output += unknownFields.getDescription(indent: indent)
+        return output
+    }
+    override public var hashValue:Int {
+        get {
+            var hashCode:Int = 7
+            if hasType {
+                hashCode = (hashCode &* 31) &+ type.hashValue
+            }
+            if hasContent {
+                hashCode = (hashCode &* 31) &+ content.hashValue
+            }
+            hashCode = (hashCode &* 31) &+  unknownFields.hashValue
+            return hashCode
+        }
+    }
+
+
+    //Meta information declaration start
+
+    override public class func className() -> String {
+        return "PlainText"
+    }
+    override public func className() -> String {
+        return "PlainText"
+    }
+    //Meta information declaration end
+
+    final public class Builder : GeneratedMessageBuilder {
+        fileprivate var builderResult:PlainText = PlainText()
+        public func getMessage() -> PlainText {
+            return builderResult
+        }
+
+        required override public init () {
+            super.init()
+        }
+        public var type:UInt32 {
+            get {
+                return builderResult.type
+            }
+            set (value) {
+                builderResult.hasType = true
+                builderResult.type = value
+            }
+        }
+        public var hasType:Bool {
+            get {
+                return builderResult.hasType
+            }
+        }
+        @discardableResult
+        public func setType(_ value:UInt32) -> PlainText.Builder {
+            self.type = value
+            return self
+        }
+        @discardableResult
+        public func clearType() -> PlainText.Builder{
+            builderResult.hasType = false
+            builderResult.type = nil
+            return self
+        }
+        public var content:String {
+            get {
+                return builderResult.content
+            }
+            set (value) {
+                builderResult.hasContent = true
+                builderResult.content = value
+            }
+        }
+        public var hasContent:Bool {
+            get {
+                return builderResult.hasContent
+            }
+        }
+        @discardableResult
+        public func setContent(_ value:String) -> PlainText.Builder {
+            self.content = value
+            return self
+        }
+        @discardableResult
+        public func clearContent() -> PlainText.Builder{
+            builderResult.hasContent = false
+            builderResult.content = nil
+            return self
+        }
+        override public var internalGetResult:GeneratedMessage {
+            get {
+                return builderResult
+            }
+        }
+        @discardableResult
+        override public func clear() -> PlainText.Builder {
+            builderResult = PlainText()
+            return self
+        }
+        override public func clone() throws -> PlainText.Builder {
+            return try PlainText.builderWithPrototype(prototype:builderResult)
+        }
+        override public func build() throws -> PlainText {
+            try checkInitialized()
+            return buildPartial()
+        }
+        public func buildPartial() -> PlainText {
+            let returnMe:PlainText = builderResult
+            return returnMe
+        }
+        @discardableResult
+        public func mergeFrom(other:PlainText) throws -> PlainText.Builder {
+            if other == PlainText() {
+                return self
+            }
+            if other.hasType {
+                type = other.type
+            }
+            if other.hasContent {
+                content = other.content
+            }
+            try merge(unknownField: other.unknownFields)
+            return self
+        }
+        @discardableResult
+        override public func mergeFrom(codedInputStream: CodedInputStream) throws -> PlainText.Builder {
+            return try mergeFrom(codedInputStream: codedInputStream, extensionRegistry:ExtensionRegistry())
+        }
+        @discardableResult
+        override public func mergeFrom(codedInputStream: CodedInputStream, extensionRegistry:ExtensionRegistry) throws -> PlainText.Builder {
+            let unknownFieldsBuilder:UnknownFieldSet.Builder = try UnknownFieldSet.builderWithUnknownFields(copyFrom:self.unknownFields)
+            while (true) {
+                let protobufTag = try codedInputStream.readTag()
+                switch protobufTag {
+                case 0: 
+                    self.unknownFields = try unknownFieldsBuilder.build()
+                    return self
+
+                case 8:
+                    type = try codedInputStream.readUInt32()
+
+                case 18:
+                    content = try codedInputStream.readString()
+
+                default:
+                    if (!(try parse(codedInputStream:codedInputStream, unknownFields:unknownFieldsBuilder, extensionRegistry:extensionRegistry, tag:protobufTag))) {
+                        unknownFields = try unknownFieldsBuilder.build()
+                        return self
+                    }
+                }
+            }
+        }
+        class override public func decodeToBuilder(jsonMap:Dictionary<String,Any>) throws -> PlainText.Builder {
+            let resultDecodedBuilder = PlainText.Builder()
+            if let jsonValueType = jsonMap["type"] as? UInt {
+                resultDecodedBuilder.type = UInt32(jsonValueType)
+            } else if let jsonValueType = jsonMap["type"] as? String {
+                resultDecodedBuilder.type = UInt32(jsonValueType)!
+            }
+            if let jsonValueContent = jsonMap["content"] as? String {
+                resultDecodedBuilder.content = jsonValueContent
+            }
+            return resultDecodedBuilder
+        }
+        override class public func fromJSONToBuilder(data:Data) throws -> PlainText.Builder {
+            let jsonData = try JSONSerialization.jsonObject(with:data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+            guard let jsDataCast = jsonData as? Dictionary<String,Any> else {
+              throw ProtocolBuffersError.invalidProtocolBuffer("Invalid JSON data")
+            }
+            return try PlainText.Builder.decodeToBuilder(jsonMap:jsDataCast)
+        }
+    }
+
+}
+
 final public class Wire : GeneratedMessage {
     public typealias BuilderType = Wire.Builder
 
@@ -1004,6 +1275,7 @@ final public class Wire : GeneratedMessage {
         fieldCheck = fieldCheck && (lhs.contacts == rhs.contacts)
         fieldCheck = fieldCheck && (lhs.hasStore == rhs.hasStore) && (!lhs.hasStore || lhs.store == rhs.store)
         fieldCheck = fieldCheck && (lhs.hasPayload == rhs.hasPayload) && (!lhs.hasPayload || lhs.payload == rhs.payload)
+        fieldCheck = fieldCheck && (lhs.hasPlainText == rhs.hasPlainText) && (!lhs.hasPlainText || lhs.plainText == rhs.plainText)
         fieldCheck = (fieldCheck && (lhs.unknownFields == rhs.unknownFields))
         return fieldCheck
     }
@@ -1024,6 +1296,7 @@ final public class Wire : GeneratedMessage {
             case handshake = 7
             case payload = 8
             case loginResponse = 9
+            case plainText = 10
             public func toString() -> String {
                 switch self {
                 case .login: return "LOGIN"
@@ -1036,6 +1309,7 @@ final public class Wire : GeneratedMessage {
                 case .handshake: return "HANDSHAKE"
                 case .payload: return "PAYLOAD"
                 case .loginResponse: return "LOGIN_RESPONSE"
+                case .plainText: return "PLAIN_TEXT"
                 }
             }
             public static func fromString(_ str:String) throws -> Wire.Which {
@@ -1050,6 +1324,7 @@ final public class Wire : GeneratedMessage {
                 case "HANDSHAKE":    return .handshake
                 case "PAYLOAD":    return .payload
                 case "LOGIN_RESPONSE":    return .loginResponse
+                case "PLAIN_TEXT":    return .plainText
                 default: throw ProtocolBuffersError.invalidProtocolBuffer("Conversion failed.")
                 }
             }
@@ -1067,6 +1342,7 @@ final public class Wire : GeneratedMessage {
                 case .handshake: return ".handshake"
                 case .payload: return ".payload"
                 case .loginResponse: return ".loginResponse"
+                case .plainText: return ".plainText"
                 }
             }
             public var hashValue:Int {
@@ -1101,6 +1377,8 @@ final public class Wire : GeneratedMessage {
     public fileprivate(set) var payload:Data! = nil
     public fileprivate(set) var hasPayload:Bool = false
 
+    public fileprivate(set) var plainText:PlainText!
+    public fileprivate(set) var hasPlainText:Bool = false
     required public init() {
         super.init()
     }
@@ -1134,6 +1412,9 @@ final public class Wire : GeneratedMessage {
         }
         if hasPayload {
             try codedOutputStream.writeData(fieldNumber: 106, value:payload)
+        }
+        if hasPlainText {
+            try codedOutputStream.writeMessage(fieldNumber: 107, value:plainText)
         }
         try unknownFields.writeTo(codedOutputStream: codedOutputStream)
     }
@@ -1174,6 +1455,11 @@ final public class Wire : GeneratedMessage {
         }
         if hasPayload {
             serialize_size += payload.computeDataSize(fieldNumber: 106)
+        }
+        if hasPlainText {
+            if let varSizeplainText = plainText?.computeMessageSize(fieldNumber: 107) {
+                serialize_size += varSizeplainText
+            }
         }
         serialize_size += unknownFields.serializedSize()
         memoizedSerializedSize = serialize_size
@@ -1235,6 +1521,9 @@ final public class Wire : GeneratedMessage {
         if hasPayload {
             jsonMap["payload"] = payload.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
         }
+        if hasPlainText {
+            jsonMap["plainText"] = try plainText.encode()
+        }
         return jsonMap
     }
     override class public func decode(jsonMap:Dictionary<String,Any>) throws -> Wire {
@@ -1284,6 +1573,13 @@ final public class Wire : GeneratedMessage {
         if hasPayload {
             output += "\(indent) payload: \(payload) \n"
         }
+        if hasPlainText {
+            output += "\(indent) plainText {\n"
+            if let outDescPlainText = plainText {
+                output += try outDescPlainText.getDescription(indent: "\(indent)  ")
+            }
+            output += "\(indent) }\n"
+        }
         output += unknownFields.getDescription(indent: indent)
         return output
     }
@@ -1320,6 +1616,11 @@ final public class Wire : GeneratedMessage {
             }
             if hasPayload {
                 hashCode = (hashCode &* 31) &+ payload.hashValue
+            }
+            if hasPlainText {
+                if let hashValueplainText = plainText?.hashValue {
+                    hashCode = (hashCode &* 31) &+ hashValueplainText
+                }
             }
             hashCode = (hashCode &* 31) &+  unknownFields.hashValue
             return hashCode
@@ -1624,6 +1925,60 @@ final public class Wire : GeneratedMessage {
             builderResult.payload = nil
             return self
         }
+        public var plainText:PlainText! {
+            get {
+                if plainTextBuilder_ != nil {
+                    builderResult.plainText = plainTextBuilder_.getMessage()
+                }
+                return builderResult.plainText
+            }
+            set (value) {
+                builderResult.hasPlainText = true
+                builderResult.plainText = value
+            }
+        }
+        public var hasPlainText:Bool {
+            get {
+                return builderResult.hasPlainText
+            }
+        }
+        fileprivate var plainTextBuilder_:PlainText.Builder! {
+            didSet {
+                builderResult.hasPlainText = true
+            }
+        }
+        public func getPlainTextBuilder() -> PlainText.Builder {
+            if plainTextBuilder_ == nil {
+                plainTextBuilder_ = PlainText.Builder()
+                builderResult.plainText = plainTextBuilder_.getMessage()
+                if plainText != nil {
+                    try! plainTextBuilder_.mergeFrom(other: plainText)
+                }
+            }
+            return plainTextBuilder_
+        }
+        @discardableResult
+        public func setPlainText(_ value:PlainText!) -> Wire.Builder {
+            self.plainText = value
+            return self
+        }
+        @discardableResult
+        public func mergePlainText(value:PlainText) throws -> Wire.Builder {
+            if builderResult.hasPlainText {
+                builderResult.plainText = try PlainText.builderWithPrototype(prototype:builderResult.plainText).mergeFrom(other: value).buildPartial()
+            } else {
+                builderResult.plainText = value
+            }
+            builderResult.hasPlainText = true
+            return self
+        }
+        @discardableResult
+        public func clearPlainText() -> Wire.Builder {
+            plainTextBuilder_ = nil
+            builderResult.hasPlainText = false
+            builderResult.plainText = nil
+            return self
+        }
         override public var internalGetResult:GeneratedMessage {
             get {
                 return builderResult
@@ -1676,6 +2031,9 @@ final public class Wire : GeneratedMessage {
             }
             if other.hasPayload {
                 payload = other.payload
+            }
+            if (other.hasPlainText) {
+                try mergePlainText(value: other.plainText)
             }
             try merge(unknownField: other.unknownFields)
             return self
@@ -1738,6 +2096,14 @@ final public class Wire : GeneratedMessage {
                 case 850:
                     payload = try codedInputStream.readData()
 
+                case 858:
+                    let subBuilder:PlainText.Builder = PlainText.Builder()
+                    if hasPlainText {
+                        try subBuilder.mergeFrom(other: plainText)
+                    }
+                    try codedInputStream.readMessage(builder: subBuilder, extensionRegistry:extensionRegistry)
+                    plainText = subBuilder.buildPartial()
+
                 default:
                     if (!(try parse(codedInputStream:codedInputStream, unknownFields:unknownFieldsBuilder, extensionRegistry:extensionRegistry, tag:protobufTag))) {
                         unknownFields = try unknownFieldsBuilder.build()
@@ -1784,6 +2150,10 @@ final public class Wire : GeneratedMessage {
             }
             if let jsonValuePayload = jsonMap["payload"] as? String {
                 resultDecodedBuilder.payload = Data(base64Encoded:jsonValuePayload, options: Data.Base64DecodingOptions(rawValue:0))!
+            }
+            if let jsonValuePlainText = jsonMap["plainText"] as? Dictionary<String,Any> {
+                resultDecodedBuilder.plainText = try PlainText.Builder.decodeToBuilder(jsonMap:jsonValuePlainText).build()
+
             }
             return resultDecodedBuilder
         }
@@ -2011,6 +2381,70 @@ extension Login.Builder: GeneratedMessageBuilderProtocol {
         }
     }
 }
+extension PlainText: GeneratedMessageProtocol {
+    public class func parseArrayDelimitedFrom(inputStream: InputStream) throws -> Array<PlainText> {
+        var mergedArray = Array<PlainText>()
+        while let value = try parseDelimitedFrom(inputStream: inputStream) {
+          mergedArray.append(value)
+        }
+        return mergedArray
+    }
+    public class func parseDelimitedFrom(inputStream: InputStream) throws -> PlainText? {
+        return try PlainText.Builder().mergeDelimitedFrom(inputStream: inputStream)?.build()
+    }
+    public class func parseFrom(data: Data) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(data: data, extensionRegistry:WireRoot.default.extensionRegistry).build()
+    }
+    public class func parseFrom(data: Data, extensionRegistry:ExtensionRegistry) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(data: data, extensionRegistry:extensionRegistry).build()
+    }
+    public class func parseFrom(inputStream: InputStream) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(inputStream: inputStream).build()
+    }
+    public class func parseFrom(inputStream: InputStream, extensionRegistry:ExtensionRegistry) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(inputStream: inputStream, extensionRegistry:extensionRegistry).build()
+    }
+    public class func parseFrom(codedInputStream: CodedInputStream) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(codedInputStream: codedInputStream).build()
+    }
+    public class func parseFrom(codedInputStream: CodedInputStream, extensionRegistry:ExtensionRegistry) throws -> PlainText {
+        return try PlainText.Builder().mergeFrom(codedInputStream: codedInputStream, extensionRegistry:extensionRegistry).build()
+    }
+    public subscript(key: String) -> Any? {
+        switch key {
+        case "type": return self.type
+        case "content": return self.content
+        default: return nil
+        }
+    }
+}
+extension PlainText.Builder: GeneratedMessageBuilderProtocol {
+    public typealias GeneratedMessageType = PlainText
+    public subscript(key: String) -> Any? {
+        get { 
+            switch key {
+            case "type": return self.type
+            case "content": return self.content
+            default: return nil
+            }
+        }
+        set (newSubscriptValue) { 
+            switch key {
+            case "type":
+                guard let newSubscriptValue = newSubscriptValue as? UInt32 else {
+                    return
+                }
+                self.type = newSubscriptValue
+            case "content":
+                guard let newSubscriptValue = newSubscriptValue as? String else {
+                    return
+                }
+                self.content = newSubscriptValue
+            default: return
+            }
+        }
+    }
+}
 extension Wire: GeneratedMessageProtocol {
     public class func parseArrayDelimitedFrom(inputStream: InputStream) throws -> Array<Wire> {
         var mergedArray = Array<Wire>()
@@ -2051,6 +2485,7 @@ extension Wire: GeneratedMessageProtocol {
         case "contacts": return self.contacts
         case "store": return self.store
         case "payload": return self.payload
+        case "plainText": return self.plainText
         default: return nil
         }
     }
@@ -2069,6 +2504,7 @@ extension Wire.Builder: GeneratedMessageBuilderProtocol {
             case "contacts": return self.contacts
             case "store": return self.store
             case "payload": return self.payload
+            case "plainText": return self.plainText
             default: return nil
             }
         }
@@ -2119,6 +2555,11 @@ extension Wire.Builder: GeneratedMessageBuilderProtocol {
                     return
                 }
                 self.payload = newSubscriptValue
+            case "plainText":
+                guard let newSubscriptValue = newSubscriptValue as? PlainText else {
+                    return
+                }
+                self.plainText = newSubscriptValue
             default: return
             }
         }

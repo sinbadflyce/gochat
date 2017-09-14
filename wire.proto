@@ -21,6 +21,11 @@ message Login {
     string deviceToken = 4;
 }
 
+message PlainText {
+    uint32 type = 1;
+    string content = 2;
+}
+
 message Wire {
     uint32 version = 1;
     string sessionId = 2;
@@ -39,6 +44,7 @@ message Wire {
 	    HANDSHAKE = 7;
 	    PAYLOAD = 8;
         LOGIN_RESPONSE = 9;
+        PLAIN_TEXT = 10;
     }
     Which which = 5;
 
@@ -47,4 +53,5 @@ message Wire {
     repeated Contact contacts = 102; // for roster, presence, and invite
     Store store = 104;
     bytes payload = 106;
+    PlainText plainText = 107;
 }

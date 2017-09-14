@@ -68,6 +68,10 @@ class DetailViewController: UIViewController {
         EventBus.addListener(about: .text) { notification in
             self.updateTranscript()
         }
+        
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -89,5 +93,9 @@ class DetailViewController: UIViewController {
     
     private func lineOf(_ text: Text) -> String {
         return text.from + ": " + String(data: text.body, encoding: .utf8)!  + "\n"
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
 }

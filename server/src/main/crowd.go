@@ -91,6 +91,16 @@ func (crowd *Crowd) messageArrived(conn *websocket.Conn, wire *Wire, sessionId s
 	  fmt.Println("wire is nil")
 	}
 	forward(client, wire)
+  case Wire_PLAIN_TEXT:
+	  if client == nil {
+		  fmt.Printf("client is nil %d\n", len(crowd.clients))
+	  }
+	  if wire == nil {
+		  fmt.Println("wire is nil")
+	  }
+	  // push notification for a new message
+	  crowd.pushNewMessageNotification(wire, client)
+	  forward(client, wire)
   default:
 	fmt.Println("No handler for " + wire.GetWhich().String())
   }
@@ -217,16 +227,48 @@ func (crowd *Crowd) updatePresence(sessionId string, online bool) {
 
 	data := crowd.clients[subscriber]
 	fmt.Printf("\t deviceToken = %s  contacts length = %d\n", data.deviceToken, len(update.GetContacts()))
+
 	//push notification client online/offline
+	message := ""
 	if client.online {
-	  content := map[string]interface{}{"message": from + " is Online"}
-	  client.pushNotification(content, data.deviceToken)
+		message = from + " is Online"
 	} else {
-	  content := map[string]interface{}{"message": from + " is Offline"}
-	  client.pushNotification(content, data.deviceToken)
+		message = from + " is Offline"
+	}
+	if len(data.deviceToken) == 64 {
+		// iOS/MacOS
+		client.pushWithAPNs(message, data.deviceToken)
+	} else if len(data.deviceToken) > 64 {
+		// Android
+		content := map[string]interface{}{"message": message}
+		client.pushWithGCM(content, data.deviceToken)
 	}
 
 	crowd.queue <- *update
   }
   client.subscribeToContacts()
+}
+
+func (crowd *Crowd) pushNewMessageNotification(wire *Wire, client *Client) {
+	// inform subscribers
+	from := client.id
+	name := client.name
+
+	for _, subscriber := range crowd.presenceSubscribers[from] {
+		data := crowd.clients[subscriber]
+		if data.id == wire.To {
+			fmt.Println("\nPush notification to: " + data.name)
+
+			message := name + " has sent a new message to you"
+			if len(data.deviceToken) == 64 {
+				// iOS/MacOS
+				client.pushWithAPNs(message, data.deviceToken)
+			} else if len(data.deviceToken) > 64 {
+				// Android
+				content := map[string]interface{}{"message": message}
+				client.pushWithGCM(content, data.deviceToken)
+			}
+			break
+		}
+	}
 }

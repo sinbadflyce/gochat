@@ -106,7 +106,11 @@ class OfficeAuthentication: NSObject, URLSessionDelegate, WKNavigationDelegate {
                 print(error.localizedDescription)
             } else {
                 print("Success!! We have an access token.")
-                self.getUserInfo()
+                if self.account?.accessToken.hasExpired == true {
+                    self.account?.oauthClient?.refreshAccessToken()
+                } else {
+                    self.getUserInfo()
+                }
             }
         }
     }

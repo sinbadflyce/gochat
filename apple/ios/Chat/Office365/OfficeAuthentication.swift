@@ -185,7 +185,7 @@ class OfficeAuthentication: NSObject, URLSessionDelegate {
         if let jwt = try? decode(jwt: idToken) {
             print(jwt.body)
             if var username = jwt.claim(name: "preferred_username").string {
-                let patern = "@[A-Za-z]++\\.[A-Za-z]++$"
+                let patern = "@[A-Za-z]++\\.(.)++$"
                 if self.matches(for: patern, in: username).count > 0 {
                     username = username.replacingOccurrences(of: patern, with: "", options: .regularExpression, range: nil)
                 }

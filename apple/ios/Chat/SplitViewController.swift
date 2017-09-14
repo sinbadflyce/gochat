@@ -40,7 +40,7 @@ class SplitViewController : UISplitViewController {
         SplitViewController.shared = self
 
         Auth.shared.clearUser()
-        OfficeAuthentication.shared.signout()
+//         OfficeAuthentication.shared.signout()
         
         WireBackend.shared.connect()
         

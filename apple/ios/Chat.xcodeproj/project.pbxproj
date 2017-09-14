@@ -25,7 +25,7 @@
 		1AB062151E8843E600A841D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AB062141E8843E600A841D0 /* Assets.xcassets */; };
 		66C4B5946A64F209719F1358 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ACBFB437F9424A73A5B0830 /* Pods_Chat.framework */; };
 		851BE4311F666F5E005ACC29 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 851BE4301F666F5E005ACC29 /* UserNotifications.framework */; };
-		851BE4331F6670E5005ACC29 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851BE4321F6670E5005ACC29 /* Constant.swift */; };
+		8522998B1F678EB10024EEF4 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8522998A1F678EB10024EEF4 /* Constant.swift */; };
 		85255F1D1F4AE15C00576B07 /* MSAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85255F1C1F4AE15C00576B07 /* MSAL.framework */; };
 		85621CA31F56671A007351CB /* OfficeAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85621CA21F56671A007351CB /* OfficeAuthentication.swift */; };
 		E5CD23511F3AB79200937C44 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CD23461F3AB79200937C44 /* Audio.swift */; };
@@ -93,7 +93,7 @@
 		1AB062191E8843E600A841D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		851BE42F1F666C7F005ACC29 /* Chat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chat.entitlements; sourceTree = "<group>"; };
 		851BE4301F666F5E005ACC29 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
-		851BE4321F6670E5005ACC29 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		8522998A1F678EB10024EEF4 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = ../../common/Constant.swift; sourceTree = "<group>"; };
 		85255F1C1F4AE15C00576B07 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = Carthage/Build/iOS/MSAL.framework; sourceTree = "<group>"; };
 		85621CA21F56671A007351CB /* OfficeAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAuthentication.swift; sourceTree = "<group>"; };
 		C5A48039D30C2E9ECC041BE6 /* Pods-Chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.release.xcconfig"; sourceTree = "<group>"; };
@@ -201,6 +201,7 @@
 				1AA386E41F04B02900F18D93 /* BridgingHeader.h */,
 				E5CD23B31F3AC16D00937C44 /* Application.swift */,
 				1A709A451EEF29EC003C2699 /* Crypto.swift */,
+				8522998A1F678EB10024EEF4 /* Constant.swift */,
 				1A709A461EEF29EC003C2699 /* EventBus.swift */,
 				1A60E0011EA4039F00BECD73 /* Model.swift */,
 				1A709A471EEF29EC003C2699 /* Network.swift */,
@@ -211,7 +212,6 @@
 				1A709A4D1EEF8837003C2699 /* Wire.proto.swift */,
 				E5CD23981F3AB8D900937C44 /* AV.swift */,
 				E5CD23991F3AB8D900937C44 /* Types.swift */,
-				851BE4321F6670E5005ACC29 /* Constant.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -355,7 +355,7 @@
 					1AB062071E8843E500A841D0 = {
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -401,13 +401,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Chat-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		578A0DFDBD2EF911B4B47A00 /* [CP] Embed Pods Frameworks */ = {
@@ -416,9 +419,22 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Chat/Pods-Chat-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework",
+				"${BUILT_PRODUCTS_DIR}/ProtocolBuffers-Swift/ProtocolBuffers.framework",
+				"${BUILT_PRODUCTS_DIR}/SlackTextViewController/SlackTextViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/themis/themis.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWTDecode.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtocolBuffers.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SlackTextViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/themis.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -496,7 +512,7 @@
 				E5CD23511F3AB79200937C44 /* Audio.swift in Sources */,
 				E5CD23A61F3ABFF000937C44 /* UIKit.swift in Sources */,
 				1A43D8171F3822F8004A8C8A /* Auth.swift in Sources */,
-				851BE4331F6670E5005ACC29 /* Constant.swift in Sources */,
+				8522998B1F678EB10024EEF4 /* Constant.swift in Sources */,
 				1AB0620E1E8843E500A841D0 /* MasterViewController.swift in Sources */,
 				E5CD23541F3AB79200937C44 /* AudioOutput.swift in Sources */,
 				E5CD23B41F3AC16D00937C44 /* Application.swift in Sources */,
@@ -651,16 +667,17 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = H4C7478UQW;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "8d3e6567-706f-4cfc-aa27-e082b5bd7508";
+				PROVISIONING_PROFILE_SPECIFIER = "ClearKeep iOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -678,16 +695,17 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = H4C7478UQW;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "8d3e6567-706f-4cfc-aa27-e082b5bd7508";
+				PROVISIONING_PROFILE_SPECIFIER = "ClearKeep iOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;

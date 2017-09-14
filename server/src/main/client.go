@@ -6,7 +6,8 @@ import (
   "github.com/golang/protobuf/proto"
   "github.com/gorilla/websocket"
   "github.com/google/go-gcm"
-  //"github.com/alexjlockwood/gcm"
+  "log"
+  "github.com/timehop/apns"
 )
 
 type Client struct {
@@ -193,13 +194,14 @@ func (client *Client) receivedContacts(wire *Wire) {
   forward(client, wire)
 }
 
-func (client *Client) pushNotification(data map[string]interface{}, pushToken string) {
+func (client *Client) pushWithGCM(data map[string]interface{}, pushToken string) {
   serverKey := "AIzaSyB14mtQyetuI127fV11JGb-bTqVkfBDQJY"
   var msg gcm.HttpMessage
   regIDs := []string{pushToken}
 
   msg.RegistrationIds = regIDs
   msg.Data = data
+  msg.ContentAvailable = true
   response, err := gcm.SendHttp(serverKey, msg)
   if err != nil {
 	fmt.Println(err.Error())
@@ -212,4 +214,32 @@ func (client *Client) pushNotification(data map[string]interface{}, pushToken st
 	fmt.Println("\tResults ", response.Results)
 	fmt.Println("=========================================")
   }
+}
+
+func (client *Client) pushWithAPNs(content string, deviceToken string) {
+	c, err := apns.NewClientWithFiles(apns.SandboxGateway, "CK_DEV_APN_CER.pem", "CK_DEV_APN_NOPASS_KEY.pem")
+	if err != nil {
+		log.Fatal("could not create new client", err.Error())
+	}
+
+	go func() {
+		for f := range c.FailedNotifs {
+			fmt.Println("Notif", f.Notif.ID, "failed with", f.Err.Error())
+		}
+	}()
+
+	p := apns.NewPayload()
+	p.APS.Alert.Body = content
+	//p.APS.Badge.Set(1)
+	//p.APS.Sound = "turn_down_for_what.aiff"
+	p.APS.ContentAvailable = 1
+
+	m := apns.NewNotification()
+	m.Payload = p
+	m.DeviceToken = deviceToken
+	m.Priority = apns.PriorityImmediate
+	m.Identifier = 12312       // Integer for APNS
+	m.ID = "user_id:timestamp" // ID not sent to Apple – to identify error notifications
+
+	c.Send(m)
 }
