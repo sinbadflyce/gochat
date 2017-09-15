@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AAD Instance</key>
+	<dict>
+		<key>Authority</key>
+		<string>https://login.microsoftonline.com/common/oauth2/v2.0/authorize</string>
+		<key>ClientId</key>
+		<string>044e6315-8adc-4dce-9e8e-d9c4d8fef806</string>
+		<key>FullScreen</key>
+		<true/>
+		<key>RequestTimeout</key>
+		<integer>30</integer>
+		<key>SupportsValidation</key>
+		<true/>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -28,18 +41,5 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>AAD Instance</key>
-	<dict>
-		<key>Authority</key>
-		<string>https://login.microsoftonline.com/common/oauth2/v2.0/authorize</string>
-		<key>ClientId</key>
-		<string>044e6315-8adc-4dce-9e8e-d9c4d8fef806</string>
-		<key>RequestTimeout</key>
-		<integer>30</integer>
-		<key>SupportsValidation</key>
-		<true/>
-		<key>FullScreen</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

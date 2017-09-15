@@ -142,6 +142,10 @@ private class Peer {
     func didReceive(_ data: Data) {
         print("status is \(status)")
         do {
+            if session == nil {
+                return
+            }
+
             let decryptedMessage = try session!.unwrapData(data)
             if !session!.isSessionEstablished() { // themis says: send this back
                 print("themis says: send this back")

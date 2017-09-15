@@ -18,6 +18,7 @@ type Client struct {
   online      bool
   crowd       *Crowd
   deviceToken string
+  platform string
 }
 
 func (client *Client) Save(db *bolt.DB, wire *Wire) {
@@ -194,6 +195,28 @@ func (client *Client) receivedContacts(wire *Wire) {
   forward(client, wire)
 }
 
+func (client *Client) pushNewMessageNotification(wire *Wire) {
+	// inform subscribers
+	from := client.id
+	name := client.name
+
+	for _, subscriber := range crowd.presenceSubscribers[from] {
+		data := crowd.clients[subscriber]
+		if data.id == wire.To {
+			fmt.Println("\nPush notification to: " + data.name + " (" + data.platform + ")" )
+
+			message := name + " has sent a new message to you"
+			if data.platform == "ios" || data.platform == "osx" {
+				client.pushWithAPNs(message, data.deviceToken, data.platform)
+			} else if data.platform == "android" {
+				content := map[string]interface{}{"message": message}
+				client.pushWithGCM(content, data.deviceToken)
+			}
+			break
+		}
+	}
+}
+
 func (client *Client) pushWithGCM(data map[string]interface{}, pushToken string) {
   serverKey := "AIzaSyB14mtQyetuI127fV11JGb-bTqVkfBDQJY"
   var msg gcm.HttpMessage
@@ -216,8 +239,24 @@ func (client *Client) pushWithGCM(data map[string]interface{}, pushToken string)
   }
 }
 
-func (client *Client) pushWithAPNs(content string, deviceToken string) {
-	c, err := apns.NewClientWithFiles(apns.SandboxGateway, "CK_DEV_APN_CER.pem", "CK_DEV_APN_NOPASS_KEY.pem")
+func (client *Client) pushWithAPNs(content string, deviceToken string, platform string) {
+	cerfile := ""
+	keyFile := ""
+
+	if platform == "ios" {
+		cerfile = "CK_DEV_APN_CER.pem"
+		keyFile = "CK_DEV_APN_NOPASS_KEY.pem"
+	} else if platform == "osx" {
+		cerfile = "CK_DEV_MacOS_APN_CER.pem"
+		keyFile = "CK_DEV_APN_MACOS_NOPASS_KEY.pem"
+	}
+
+	if cerfile == "" {
+		fmt.Println("\nThere is no certfile by platform")
+		return
+	}
+
+	c, err := apns.NewClientWithFiles(apns.SandboxGateway, cerfile, keyFile)
 	if err != nil {
 		log.Fatal("could not create new client", err.Error())
 	}
@@ -241,5 +280,9 @@ func (client *Client) pushWithAPNs(content string, deviceToken string) {
 	m.Identifier = 12312       // Integer for APNS
 	m.ID = "user_id:timestamp" // ID not sent to Apple – to identify error notifications
 
-	c.Send(m)
+	erro := c.Send(m)
+
+	fmt.Println("============PUSH NOTIFICATION============")
+	fmt.Println("\tError ", erro)
+	fmt.Println("========================================")
 }

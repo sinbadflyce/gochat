@@ -8,6 +8,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var transcript: UITextView!
     @IBOutlet weak var videoBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var audioBarButtonItem: UIBarButtonItem!
+    @IBOutlet weak var viewInputBottomConstraint: NSLayoutConstraint!
     
     var callInfo: NetworkCallInfo? {
         didSet {
@@ -30,6 +31,7 @@ class DetailViewController: UIViewController {
             return
         }
         
+        Model.shared.addText(body: body.data(using: .utf8)!, from: Auth.shared.username!, to: whom)
         VoipBackend.sendText(body, peerId: whom)
         input.text = ""
     }
@@ -71,7 +73,9 @@ class DetailViewController: UIViewController {
         
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tap)
+        self.transcript.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -97,5 +101,25 @@ class DetailViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         self.view.endEditing(true)
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
+                self.viewInputBottomConstraint.constant = 0
+            } else {
+                self.viewInputBottomConstraint.constant = endFrame?.size.height ?? 0
+            }
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: animationCurve,
+                           animations: { self.view.layoutIfNeeded() },
+                           completion: nil)
+        }
     }
 }

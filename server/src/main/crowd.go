@@ -99,7 +99,7 @@ func (crowd *Crowd) messageArrived(conn *websocket.Conn, wire *Wire, sessionId s
 		  fmt.Println("wire is nil")
 	  }
 	  // push notification for a new message
-	  crowd.pushNewMessageNotification(wire, client)
+	  client.pushNewMessageNotification(wire)
 	  forward(client, wire)
   default:
 	fmt.Println("No handler for " + wire.GetWhich().String())
@@ -113,6 +113,7 @@ func (crowd *Crowd) receivedLogin(conn *websocket.Conn, login *Login) string {
   name := login.UserName
   authenToken := login.AuthenToken
   deviceToken := login.DeviceToken
+  platform    := login.Platform
 
   defer crowd.clientsMtx.Unlock()
   defer crowd.clientsMtx.Lock()
@@ -129,6 +130,7 @@ func (crowd *Crowd) receivedLogin(conn *websocket.Conn, login *Login) string {
 	  sessions:    make(map[string]*websocket.Conn),
 	  online:      false,
 	  deviceToken: deviceToken,
+	  platform: platform,
 	}
 	fmt.Println("\ttoken notification: " + deviceToken)
   }
@@ -235,11 +237,10 @@ func (crowd *Crowd) updatePresence(sessionId string, online bool) {
 	} else {
 		message = from + " is Offline"
 	}
-	if len(data.deviceToken) == 64 {
-		// iOS/MacOS
-		client.pushWithAPNs(message, data.deviceToken)
-	} else if len(data.deviceToken) > 64 {
-		// Android
+
+	if data.platform == "ios" || data.platform == "osx" {
+		client.pushWithAPNs(message, data.deviceToken, data.platform)
+	} else if data.platform == "android" {
 		content := map[string]interface{}{"message": message}
 		client.pushWithGCM(content, data.deviceToken)
 	}
@@ -247,28 +248,4 @@ func (crowd *Crowd) updatePresence(sessionId string, online bool) {
 	crowd.queue <- *update
   }
   client.subscribeToContacts()
-}
-
-func (crowd *Crowd) pushNewMessageNotification(wire *Wire, client *Client) {
-	// inform subscribers
-	from := client.id
-	name := client.name
-
-	for _, subscriber := range crowd.presenceSubscribers[from] {
-		data := crowd.clients[subscriber]
-		if data.id == wire.To {
-			fmt.Println("\nPush notification to: " + data.name)
-
-			message := name + " has sent a new message to you"
-			if len(data.deviceToken) == 64 {
-				// iOS/MacOS
-				client.pushWithAPNs(message, data.deviceToken)
-			} else if len(data.deviceToken) > 64 {
-				// Android
-				content := map[string]interface{}{"message": message}
-				client.pushWithGCM(content, data.deviceToken)
-			}
-			break
-		}
-	}
 }

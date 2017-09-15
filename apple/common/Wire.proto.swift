@@ -622,6 +622,7 @@ final public class Login : GeneratedMessage {
         fieldCheck = fieldCheck && (lhs.hasUserName == rhs.hasUserName) && (!lhs.hasUserName || lhs.userName == rhs.userName)
         fieldCheck = fieldCheck && (lhs.hasAuthenToken == rhs.hasAuthenToken) && (!lhs.hasAuthenToken || lhs.authenToken == rhs.authenToken)
         fieldCheck = fieldCheck && (lhs.hasDeviceToken == rhs.hasDeviceToken) && (!lhs.hasDeviceToken || lhs.deviceToken == rhs.deviceToken)
+        fieldCheck = fieldCheck && (lhs.hasPlatform == rhs.hasPlatform) && (!lhs.hasPlatform || lhs.platform == rhs.platform)
         fieldCheck = (fieldCheck && (lhs.unknownFields == rhs.unknownFields))
         return fieldCheck
     }
@@ -637,6 +638,9 @@ final public class Login : GeneratedMessage {
 
     public fileprivate(set) var deviceToken:String! = nil
     public fileprivate(set) var hasDeviceToken:Bool = false
+
+    public fileprivate(set) var platform:String! = nil
+    public fileprivate(set) var hasPlatform:Bool = false
 
     required public init() {
         super.init()
@@ -656,6 +660,9 @@ final public class Login : GeneratedMessage {
         }
         if hasDeviceToken {
             try codedOutputStream.writeString(fieldNumber: 4, value:deviceToken)
+        }
+        if hasPlatform {
+            try codedOutputStream.writeString(fieldNumber: 5, value:platform)
         }
         try unknownFields.writeTo(codedOutputStream: codedOutputStream)
     }
@@ -677,6 +684,9 @@ final public class Login : GeneratedMessage {
         }
         if hasDeviceToken {
             serialize_size += deviceToken.computeStringSize(fieldNumber: 4)
+        }
+        if hasPlatform {
+            serialize_size += platform.computeStringSize(fieldNumber: 5)
         }
         serialize_size += unknownFields.serializedSize()
         memoizedSerializedSize = serialize_size
@@ -718,6 +728,9 @@ final public class Login : GeneratedMessage {
         if hasDeviceToken {
             jsonMap["deviceToken"] = deviceToken
         }
+        if hasPlatform {
+            jsonMap["platform"] = platform
+        }
         return jsonMap
     }
     override class public func decode(jsonMap:Dictionary<String,Any>) throws -> Login {
@@ -740,6 +753,9 @@ final public class Login : GeneratedMessage {
         if hasDeviceToken {
             output += "\(indent) deviceToken: \(deviceToken) \n"
         }
+        if hasPlatform {
+            output += "\(indent) platform: \(platform) \n"
+        }
         output += unknownFields.getDescription(indent: indent)
         return output
     }
@@ -757,6 +773,9 @@ final public class Login : GeneratedMessage {
             }
             if hasDeviceToken {
                 hashCode = (hashCode &* 31) &+ deviceToken.hashValue
+            }
+            if hasPlatform {
+                hashCode = (hashCode &* 31) &+ platform.hashValue
             }
             hashCode = (hashCode &* 31) &+  unknownFields.hashValue
             return hashCode
@@ -883,6 +902,31 @@ final public class Login : GeneratedMessage {
             builderResult.deviceToken = nil
             return self
         }
+        public var platform:String {
+            get {
+                return builderResult.platform
+            }
+            set (value) {
+                builderResult.hasPlatform = true
+                builderResult.platform = value
+            }
+        }
+        public var hasPlatform:Bool {
+            get {
+                return builderResult.hasPlatform
+            }
+        }
+        @discardableResult
+        public func setPlatform(_ value:String) -> Login.Builder {
+            self.platform = value
+            return self
+        }
+        @discardableResult
+        public func clearPlatform() -> Login.Builder{
+            builderResult.hasPlatform = false
+            builderResult.platform = nil
+            return self
+        }
         override public var internalGetResult:GeneratedMessage {
             get {
                 return builderResult
@@ -921,6 +965,9 @@ final public class Login : GeneratedMessage {
             if other.hasDeviceToken {
                 deviceToken = other.deviceToken
             }
+            if other.hasPlatform {
+                platform = other.platform
+            }
             try merge(unknownField: other.unknownFields)
             return self
         }
@@ -950,6 +997,9 @@ final public class Login : GeneratedMessage {
                 case 34:
                     deviceToken = try codedInputStream.readString()
 
+                case 42:
+                    platform = try codedInputStream.readString()
+
                 default:
                     if (!(try parse(codedInputStream:codedInputStream, unknownFields:unknownFieldsBuilder, extensionRegistry:extensionRegistry, tag:protobufTag))) {
                         unknownFields = try unknownFieldsBuilder.build()
@@ -973,6 +1023,9 @@ final public class Login : GeneratedMessage {
             }
             if let jsonValueDeviceToken = jsonMap["deviceToken"] as? String {
                 resultDecodedBuilder.deviceToken = jsonValueDeviceToken
+            }
+            if let jsonValuePlatform = jsonMap["platform"] as? String {
+                resultDecodedBuilder.platform = jsonValuePlatform
             }
             return resultDecodedBuilder
         }
@@ -2338,6 +2391,7 @@ extension Login: GeneratedMessageProtocol {
         case "userName": return self.userName
         case "authenToken": return self.authenToken
         case "deviceToken": return self.deviceToken
+        case "platform": return self.platform
         default: return nil
         }
     }
@@ -2351,6 +2405,7 @@ extension Login.Builder: GeneratedMessageBuilderProtocol {
             case "userName": return self.userName
             case "authenToken": return self.authenToken
             case "deviceToken": return self.deviceToken
+            case "platform": return self.platform
             default: return nil
             }
         }
@@ -2376,6 +2431,11 @@ extension Login.Builder: GeneratedMessageBuilderProtocol {
                     return
                 }
                 self.deviceToken = newSubscriptValue
+            case "platform":
+                guard let newSubscriptValue = newSubscriptValue as? String else {
+                    return
+                }
+                self.platform = newSubscriptValue
             default: return
             }
         }

@@ -19,6 +19,7 @@ message Login {
     string userName = 2;
     string authenToken = 3;
     string deviceToken = 4;
+    string platform = 5;
 }
 
 message PlainText {

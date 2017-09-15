@@ -1,5 +1,10 @@
 import Foundation
 
+enum DataType {
+    case plaintext
+    case other
+}
+
 // for use of Wire.proto
 class WireBackend {
 
@@ -50,20 +55,26 @@ class WireBackend {
     func handshook(with peerId: String) {
         if let q = queues[peerId] {
             for hold in q {
-                encryptAndSend(data: hold.data, peerId: peerId)
+                if hold.dataType == .plaintext {
+                    sendMessage(data: hold.data, peerId: peerId)
+                } else {
+                    encryptAndSend(data: hold.data, peerId: peerId)
+                }
             }
         }
     }
 
     // queue messages while waiting for handshake to complete
 
+    
     struct Hold {
         var data: Data
         var peerId: String
+        var dataType: DataType
     }
 
-    private func enqueue(data: Data, peerId: String) {
-        let hold = Hold(data: data, peerId: peerId)
+    private func enqueue(data: Data, peerId: String, dataType: DataType) {
+        let hold = Hold(data: data, peerId: peerId, dataType: dataType)
         var q = queues[peerId]
         if q == nil {
             queues[peerId] = [hold]
@@ -91,7 +102,7 @@ class WireBackend {
             case .presence:             Model.shared.didReceivePresence(wire)
             case .store:                try didReceiveStore(wire)
             case .handshake:            fallthrough
-            case .payload:              crypto!.didReceivePayload(wire.payload, from: wire.from)
+            case .payload, .plainText:  crypto!.didReceivePayload(wire.payload, from: wire.from)
             case .publicKey:            fallthrough
             case .publicKeyResponse:    didReceivePublicKey(wire)
             default:                    print("did not handle \(wire.which)")
@@ -153,7 +164,7 @@ class WireBackend {
         if crypto!.isSessionEstablished(peerId: peerId) {
             encryptAndSend(data: data, peerId: peerId)
         } else {
-            enqueue(data: data, peerId: peerId)
+            enqueue(data: data, peerId: peerId, dataType: .other)
         }
     }
     
@@ -164,8 +175,7 @@ class WireBackend {
                 send(payloadBuilder)
             }
         } else {
-            // TODO: add into queue with PlainText
-            enqueue(data: data, peerId: peerId)
+            enqueue(data: data, peerId: peerId, dataType: .plaintext)
         }
     }
 

@@ -4,8 +4,6 @@ import Cocoa
 class AppDelegate: Application, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-
-        Auth.shared.clearUser()
         EventBus.addListener(about: .connected, didReceive: { notification in
             if !Auth.shared.login() {
                 LoginViewController.popup()
@@ -21,6 +19,9 @@ class AppDelegate: Application, NSApplicationDelegate {
         })
 
         WireBackend.shared.connect()
+        
+        // Register notification
+        NSApp.registerForRemoteNotifications(matching: .alert)
     }
     
     static func ask(title: String, subtitle: String, cancelable: Bool, done:(String?)->Void) {
@@ -42,4 +43,24 @@ class AppDelegate: Application, NSApplicationDelegate {
         done(ok ? textField.stringValue : nil)
     }
     
+    func application(_ application: NSApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Convert token to string
+        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        
+        // Print it to console
+        print("APNs device token: \(deviceTokenString)")
+        UserDefaults.standard.set(deviceTokenString, forKey: Constant.kDeviceTokenKey)
+    }
+    
+    func application(_ application: NSApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Print the error to console (you should alert the user that registration failed)
+        print("APNs registration failed: \(error)")
+        UserDefaults.standard.set(nil, forKey: Constant.kDeviceTokenKey)
+    }
+    
+    func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
+//        if let apsDictionary = userInfo["aps"] as? NSDictionary {
+//
+//        }
+    }
 }

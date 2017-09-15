@@ -79,13 +79,18 @@ class Auth {
             loginBuilder.setAuthenToken(token!)
         }
         
-        
         if let deviceToken = UserDefaults.standard.string(forKey: Constant.kDeviceTokenKey) {
             loginBuilder.setDeviceToken(deviceToken)
         } else {
             // fake
             loginBuilder.setDeviceToken("abcd")
         }
+        
+        #if os(iOS)
+            loginBuilder.setPlatform("ios")
+        #elseif os(OSX)
+            loginBuilder.setPlatform("osx")
+        #endif
         
         do {
             let login = try loginBuilder.build()

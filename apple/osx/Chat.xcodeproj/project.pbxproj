@@ -106,6 +106,7 @@
 		852299881F678E920024EEF4 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = ../../common/Constant.swift; sourceTree = "<group>"; };
 		8544420C1F5FEE11001FB71E /* Webview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Webview.xib; sourceTree = "<group>"; };
 		8544420E1F5FEEAF001FB71E /* AuthenticationWebview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationWebview.swift; sourceTree = "<group>"; };
+		858990401F6B880000811DC5 /* Chat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chat.entitlements; sourceTree = "<group>"; };
 		859B2CC91F5009BF006C4E79 /* OfficeAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAuthentication.swift; sourceTree = "<group>"; };
 		931CB699F7145BBD7B223700 /* Pods-Chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Chat/Pods-Chat.debug.xcconfig"; sourceTree = "<group>"; };
 		E575EFB31F345F1100F2DA8B /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
@@ -236,6 +237,7 @@
 		1ADE89E31EA1CE0E00E41212 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				858990401F6B880000811DC5 /* Chat.entitlements */,
 				1ADE89E41EA1CE0E00E41212 /* AppDelegate.swift */,
 				1ADE89ED1EA1CE0E00E41212 /* Info.plist */,
 				1A709A4C1EEF2A0D003C2699 /* Common */,
@@ -360,8 +362,14 @@
 				TargetAttributes = {
 					1ADE89E01EA1CE0E00E41212 = {
 						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 5KH4V6747U;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -650,7 +658,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -659,8 +670,10 @@
 					"$(PROJECT_DIR)/Chat",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.OSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff2ce7f0-ad6b-4e35-89f8-ba01f6e8197a";
+				PROVISIONING_PROFILE_SPECIFIER = "CK Dev MacOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
@@ -673,7 +686,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chat/Chat.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -682,8 +698,10 @@
 					"$(PROJECT_DIR)/Chat",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.OSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff2ce7f0-ad6b-4e35-89f8-ba01f6e8197a";
+				PROVISIONING_PROFILE_SPECIFIER = "CK Dev MacOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
