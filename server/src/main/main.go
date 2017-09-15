@@ -43,6 +43,7 @@ func connected(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("\nConnection closed for session " + sessionID)
 				crowd.updatePresence(sessionID, false)
+				udpServer.CloseClient(sessionID)
 				return
 			}
 

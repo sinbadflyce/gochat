@@ -80,16 +80,28 @@ func (server *UDPServer) HandleReadData() {
 }
 
 // CloseClient ...
-func (server *UDPServer) CloseClient(peerName string) {
+func (server *UDPServer) CloseClient(sessionID string) {
 
 	// peer client is available
-	_, ok := server.udpCrowd.clients[peerName]
+	c1, ok := server.udpCrowd.clients[sessionID]
 
 	// error
 	if !ok {
-		fmt.Printf("No client with sessionId = %s\n", peerName)
+		fmt.Printf("No client with session id = %s\n", sessionID)
+		return
 	}
 
 	// remove
-	server.udpCrowd.clients[peerName] = nil
+	server.udpCrowd.clients[sessionID] = nil
+
+	_, ok = server.udpCrowd.clients[c1.name]
+
+	// error
+	if !ok {
+		fmt.Printf("No client with session id = %s\n", c1.name)
+	}
+
+	// remove
+	server.udpCrowd.clients[c1.name] = nil
+
 }
