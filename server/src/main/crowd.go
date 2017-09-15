@@ -230,6 +230,7 @@ func (crowd *Crowd) updatePresence(sessionId string, online bool) {
 	data := crowd.clients[subscriber]
 	fmt.Printf("\t deviceToken = %s  contacts length = %d\n", data.deviceToken, len(update.GetContacts()))
 
+	/*
 	//push notification client online/offline
 	message := ""
 	if client.online {
@@ -244,6 +245,7 @@ func (crowd *Crowd) updatePresence(sessionId string, online bool) {
 		content := map[string]interface{}{"message": message}
 		client.pushWithGCM(content, data.deviceToken)
 	}
+	*/
 
 	crowd.queue <- *update
   }
