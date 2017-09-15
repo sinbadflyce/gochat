@@ -87,21 +87,21 @@ func (server *UDPServer) CloseClient(sessionID string) {
 
 	// error
 	if !ok {
-		fmt.Printf("No client with session id = %s\n", sessionID)
 		return
 	}
 
 	// remove
 	server.udpCrowd.clients[sessionID] = nil
+	fmt.Printf("Remove client with session id = %s\n", sessionID)
 
 	_, ok = server.udpCrowd.clients[c1.name]
 
 	// error
 	if !ok {
-		fmt.Printf("No client with session id = %s\n", c1.name)
+		return
 	}
 
 	// remove
 	server.udpCrowd.clients[c1.name] = nil
-
+	fmt.Printf("Remove client with session id = %s\n", c1.name)
 }
