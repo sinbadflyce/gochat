@@ -9,17 +9,19 @@ import (
 
 // UDPServer ...
 type UDPServer struct {
-	udpCrowd *UDPCrowd
-	conn     *net.UDPConn
-	buffer   []byte
+	udpCrowd      *UDPCrowd
+	conn          *net.UDPConn
+	buffer        []byte
+	maxSizeBuffer int
 }
 
 // Start ...
 func (server *UDPServer) Start(tcpCrowd *Crowd) {
 	server.udpCrowd = new(UDPCrowd)
 	server.udpCrowd.tcpCrowd = tcpCrowd
+	server.maxSizeBuffer = 65536
 	server.udpCrowd.Init()
-	server.buffer = make([]byte, 2048)
+	server.buffer = make([]byte, server.maxSizeBuffer)
 
 	//Build the address
 	udpAddr, err := net.ResolveUDPAddr("udp", ":8001")

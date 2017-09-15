@@ -166,7 +166,12 @@ class VoipBackend {
                         .setWhich(.av)
                         .setAv(av)
                         .setVideoSession(try Avsession.Builder().setSid(id.sid).build()).build().data()
-            WireBackend.shared.send(data: data, peerId: id.to)
+            
+            #if TCP_NETWORK
+                WireBackend.shared.send(data: data, peerId: id.to)
+            #else
+                WireBackend.shared.udpSend(data: data, peerId: id.to)
+            #endif
         }
         catch {
             logNetworkError(error)
@@ -185,8 +190,11 @@ class VoipBackend {
                                 .setWhich(.av)
                                 .setAv(av)
                                 .setAudioSession(try Avsession.Builder().setSid(id.sid).build()).build().data()
-            
-            WireBackend.shared.send(data: data, peerId: id.to)
+            #if TCP_NETWORK
+                WireBackend.shared.send(data: data, peerId: id.to)
+            #else
+                WireBackend.shared.udpSend(data: data, peerId: id.to)
+            #endif
         }
         catch {
             logNetworkError(error)

@@ -73,7 +73,7 @@ class WireBackend {
         let wire = Wire.Builder().setWhich(.udpEstablished).setSessionId(sessionId).setFrom(from)
         udpSend(wire)
     }
-    
+        
     // queue messages while waiting for handshake to complete
 
     struct Hold {
@@ -154,6 +154,7 @@ class WireBackend {
         loginType = LoginType(rawValue: Int(login.type))
         let wireBuilder = Wire.Builder().setLogin(login).setWhich(.login)
         send(wireBuilder)
+        udpSend(wireBuilder)
     }
 
     private func authenticated(sessionId sid: String) {

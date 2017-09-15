@@ -5,7 +5,7 @@ import CocoaAsyncSocket
 class Network: WebSocketDelegate {
 
     static var address = "ws://127.0.0.1:8000/ws"
-    //static var address = "ws://192.168.2.172:8000/ws"
+    //static var address = "ws://192.168.2.135:8000/ws"
 
     static let shared = Network()
 
@@ -47,6 +47,7 @@ class Network: WebSocketDelegate {
 class UDPNetwork: NSObject {
     
     static var host = "127.0.0.1"
+    //static var host = "192.168.2.135"
     static var port: UInt16 = 8001
     
     private var udpSocket: GCDAsyncUdpSocket?
@@ -55,7 +56,7 @@ class UDPNetwork: NSObject {
         self.udpSocket = GCDAsyncUdpSocket(delegate: self, delegateQueue: DispatchQueue.main)
         
         do {
-            try udpSocket?.connect(toHost: UDPNetwork.host, onPort: UDPNetwork.port)
+            try udpSocket?.bind(toPort: 0)
             try udpSocket?.beginReceiving()
         } catch  {
             print(error)
@@ -66,7 +67,7 @@ class UDPNetwork: NSObject {
     
     func send(_ data: Data) {
         let tag = Int(Date.timeIntervalSinceReferenceDate)
-        udpSocket?.send(data, withTimeout: 30, tag: tag)
+        udpSocket?.send(data, toHost: UDPNetwork.host, port: UDPNetwork.port, withTimeout: 30, tag: tag)
     }
 }
 

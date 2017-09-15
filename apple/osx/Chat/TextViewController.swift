@@ -18,8 +18,13 @@ class TextViewController: NSViewController {
         let body = input.stringValue
         let whom = Model.shared.watching!
         Model.shared.addText(body: body.data(using: .utf8)!, from: Auth.shared.username!, to: whom)
-        //VoipBackend.sendText(body, peerId: Model.shared.watching!)
-        VoipBackend.udpSendText(body, peerId: Model.shared.watching!)
+        
+        #if UDP_NETWORK
+            VoipBackend.udpSendText(body, peerId: Model.shared.watching!)
+        #else
+            VoipBackend.sendText(body, peerId: Model.shared.watching!)
+        #endif
+        
         input.stringValue = ""
     }
 

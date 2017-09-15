@@ -360,8 +360,9 @@
 				TargetAttributes = {
 					1ADE89E01EA1CE0E00E41212 = {
 						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 5KH4V6747U;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -652,7 +653,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -661,8 +664,10 @@
 					"$(PROJECT_DIR)/Chat",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.OSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff2ce7f0-ad6b-4e35-89f8-ba01f6e8197a";
+				PROVISIONING_PROFILE_SPECIFIER = "CK Dev MacOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
@@ -675,7 +680,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5KH4V6747U;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Chat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -684,8 +691,10 @@
 					"$(PROJECT_DIR)/Chat",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = ys1382.Chat.OSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff2ce7f0-ad6b-4e35-89f8-ba01f6e8197a";
+				PROVISIONING_PROFILE_SPECIFIER = "CK Dev MacOS";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = ../common/BridgingHeader.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;

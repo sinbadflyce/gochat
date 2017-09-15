@@ -24,23 +24,54 @@ func (client *UDPClient) send(wire *Wire) {
 		return
 	}
 
+	// encode data
 	data, err := proto.Marshal(wire)
 
+	// error
 	if err != nil {
 		fmt.Printf("Proto.Marshal gets error %s\n", err.Error())
 		return
 	}
 
-	n, err := client.conn.WriteToUDP(data, client.address)
+	// send udp to client address
 
-	if err != nil {
-		fmt.Printf("WriteToUDP gets error %s\n", err.Error())
-		return
+	len := len(data)
+	var totalSent = 0
+
+	// split bytes to send
+	for len > 0 {
+
+		// UDP max bytes to send
+		var bysend = 4096
+
+		// less than, use len
+		if len < bysend {
+			bysend = len
+		}
+
+		// move to bytes range to send
+		bytes := data[totalSent:(totalSent + bysend)]
+
+		// send
+		n, err := client.conn.WriteToUDP(bytes, client.address)
+
+		// error
+		if err != nil {
+			fmt.Printf("WriteToUDP gets error %s\n", err.Error())
+			return
+		}
+
+		// logging
+		fmt.Printf("UDP sent %d bytes to from %s to %s\n", n, wire.From, client.name)
+
+		totalSent = totalSent + bysend
+		len = len - bysend
 	}
-
-	fmt.Printf("Sent %d bytes to client [%s]\n", n, client.address.String())
 }
 
 // UDPClient.receive
 func (client *UDPClient) receive(wire *Wire) {
+
+	// nothing implemented
+	fmt.Println("UDP client recevied not implemented yet")
 }

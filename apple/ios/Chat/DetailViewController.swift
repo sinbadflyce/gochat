@@ -30,7 +30,7 @@ class DetailViewController: UIViewController {
             return
         }
         
-        VoipBackend.sendText(body, peerId: whom)
+        VoipBackend.udpSendText(body, peerId: whom)
         input.text = ""
     }
 

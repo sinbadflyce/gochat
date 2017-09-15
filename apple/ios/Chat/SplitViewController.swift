@@ -147,6 +147,7 @@ class SplitViewController : UISplitViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Login"
+            textField.text = "sinbad"
             
             NotificationCenter.default.addObserver(
                 forName: NSNotification.Name.UITextFieldTextDidChange,
@@ -157,6 +158,7 @@ class SplitViewController : UISplitViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Password"
+            textField.text = "xxx"
             textField.isSecureTextEntry = true
         }
         
