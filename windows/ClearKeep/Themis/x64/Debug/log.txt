@@ -1,0 +1,2 @@
+[2017-09-22 23:34:03.057][I][4464] Init application [CClearKeepDlg::InitLogging|clearkeepdlg.cpp:81]
+[2017-09-22 23:34:16.105][I][7192] Init application [CClearKeepDlg::InitLogging|clearkeepdlg.cpp:81]

@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7585A90C-3FF9-49FF-823D-957DEDBC29C9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Themis</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\MyProjects\ClearKeep\Samples\Themis\Themis\src;D:\MyProjects\ClearKeep\Samples\Themis\Themis\src\themis;D:\MyProjects\ClearKeep\Samples\Themis\Themis\src\soter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>libeay32.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>D:\MyProjects\ClearKeep\Samples\Themis\Themis\x64\Debug</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\soter\openssl\soter.c" />
+    <ClCompile Include="src\soter\openssl\soter_asym_cipher.c" />
+    <ClCompile Include="src\soter\openssl\soter_asym_ka.c" />
+    <ClCompile Include="src\soter\openssl\soter_ecdsa_common.c" />
+    <ClCompile Include="src\soter\openssl\soter_ec_key.c" />
+    <ClCompile Include="src\soter\openssl\soter_hash.c" />
+    <ClCompile Include="src\soter\openssl\soter_rand.c" />
+    <ClCompile Include="src\soter\openssl\soter_rsa_common.c" />
+    <ClCompile Include="src\soter\openssl\soter_rsa_key.c" />
+    <ClCompile Include="src\soter\openssl\soter_rsa_key_pair_gen.c" />
+    <ClCompile Include="src\soter\openssl\soter_sign_ecdsa.c" />
+    <ClCompile Include="src\soter\openssl\soter_sign_rsa.c" />
+    <ClCompile Include="src\soter\openssl\soter_sym.c" />
+    <ClCompile Include="src\soter\openssl\soter_verify_ecdsa.c" />
+    <ClCompile Include="src\soter\openssl\soter_verify_rsa.c" />
+    <ClCompile Include="src\soter\soter_container.c" />
+    <ClCompile Include="src\soter\soter_crc32.c" />
+    <ClCompile Include="src\soter\soter_hmac.c" />
+    <ClCompile Include="src\soter\soter_kdf.c" />
+    <ClCompile Include="src\soter\soter_sign.c" />
+    <ClCompile Include="src\themis\message.c" />
+    <ClCompile Include="src\themis\secure_cell.c" />
+    <ClCompile Include="src\themis\secure_comparator.c" />
+    <ClCompile Include="src\themis\secure_message.c" />
+    <ClCompile Include="src\themis\secure_message_wrapper.c" />
+    <ClCompile Include="src\themis\secure_session.c" />
+    <ClCompile Include="src\themis\secure_session_message.c" />
+    <ClCompile Include="src\themis\secure_session_peer.c" />
+    <ClCompile Include="src\themis\secure_session_serialize.c" />
+    <ClCompile Include="src\themis\secure_session_utils.c" />
+    <ClCompile Include="src\themis\sym_enc_message.c" />
+    <ClCompile Include="src\themis\themis.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\soter\error.h" />
+    <ClInclude Include="src\soter\openssl\aes.h" />
+    <ClInclude Include="src\soter\openssl\asn1.h" />
+    <ClInclude Include="src\soter\openssl\asn1err.h" />
+    <ClInclude Include="src\soter\openssl\asn1t.h" />
+    <ClInclude Include="src\soter\openssl\asn1_mac.h" />
+    <ClInclude Include="src\soter\openssl\async.h" />
+    <ClInclude Include="src\soter\openssl\asyncerr.h" />
+    <ClInclude Include="src\soter\openssl\bio.h" />
+    <ClInclude Include="src\soter\openssl\bioerr.h" />
+    <ClInclude Include="src\soter\openssl\blowfish.h" />
+    <ClInclude Include="src\soter\openssl\bn.h" />
+    <ClInclude Include="src\soter\openssl\bnerr.h" />
+    <ClInclude Include="src\soter\openssl\buffer.h" />
+    <ClInclude Include="src\soter\openssl\buffererr.h" />
+    <ClInclude Include="src\soter\openssl\camellia.h" />
+    <ClInclude Include="src\soter\openssl\cast.h" />
+    <ClInclude Include="src\soter\openssl\cmac.h" />
+    <ClInclude Include="src\soter\openssl\cms.h" />
+    <ClInclude Include="src\soter\openssl\cmserr.h" />
+    <ClInclude Include="src\soter\openssl\comp.h" />
+    <ClInclude Include="src\soter\openssl\comperr.h" />
+    <ClInclude Include="src\soter\openssl\conf.h" />
+    <ClInclude Include="src\soter\openssl\conferr.h" />
+    <ClInclude Include="src\soter\openssl\conf_api.h" />
+    <ClInclude Include="src\soter\openssl\crypto.h" />
+    <ClInclude Include="src\soter\openssl\cryptoerr.h" />
+    <ClInclude Include="src\soter\openssl\ct.h" />
+    <ClInclude Include="src\soter\openssl\cterr.h" />
+    <ClInclude Include="src\soter\openssl\des.h" />
+    <ClInclude Include="src\soter\openssl\dh.h" />
+    <ClInclude Include="src\soter\openssl\dherr.h" />
+    <ClInclude Include="src\soter\openssl\dsa.h" />
+    <ClInclude Include="src\soter\openssl\dsaerr.h" />
+    <ClInclude Include="src\soter\openssl\dtls1.h" />
+    <ClInclude Include="src\soter\openssl\ebcdic.h" />
+    <ClInclude Include="src\soter\openssl\ec.h" />
+    <ClInclude Include="src\soter\openssl\ecdh.h" />
+    <ClInclude Include="src\soter\openssl\ecdsa.h" />
+    <ClInclude Include="src\soter\openssl\ecerr.h" />
+    <ClInclude Include="src\soter\openssl\engine.h" />
+    <ClInclude Include="src\soter\openssl\engineerr.h" />
+    <ClInclude Include="src\soter\openssl\err.h" />
+    <ClInclude Include="src\soter\openssl\evp.h" />
+    <ClInclude Include="src\soter\openssl\evperr.h" />
+    <ClInclude Include="src\soter\openssl\e_os2.h" />
+    <ClInclude Include="src\soter\openssl\hmac.h" />
+    <ClInclude Include="src\soter\openssl\idea.h" />
+    <ClInclude Include="src\soter\openssl\kdf.h" />
+    <ClInclude Include="src\soter\openssl\kdferr.h" />
+    <ClInclude Include="src\soter\openssl\lhash.h" />
+    <ClInclude Include="src\soter\openssl\md2.h" />
+    <ClInclude Include="src\soter\openssl\md4.h" />
+    <ClInclude Include="src\soter\openssl\md5.h" />
+    <ClInclude Include="src\soter\openssl\mdc2.h" />
+    <ClInclude Include="src\soter\openssl\modes.h" />
+    <ClInclude Include="src\soter\openssl\objects.h" />
+    <ClInclude Include="src\soter\openssl\objectserr.h" />
+    <ClInclude Include="src\soter\openssl\obj_mac.h" />
+    <ClInclude Include="src\soter\openssl\ocsp.h" />
+    <ClInclude Include="src\soter\openssl\ocsperr.h" />
+    <ClInclude Include="src\soter\openssl\opensslconf.h" />
+    <ClInclude Include="src\soter\openssl\opensslv.h" />
+    <ClInclude Include="src\soter\openssl\ossl_typ.h" />
+    <ClInclude Include="src\soter\openssl\pem.h" />
+    <ClInclude Include="src\soter\openssl\pem2.h" />
+    <ClInclude Include="src\soter\openssl\pemerr.h" />
+    <ClInclude Include="src\soter\openssl\pkcs12.h" />
+    <ClInclude Include="src\soter\openssl\pkcs12err.h" />
+    <ClInclude Include="src\soter\openssl\pkcs7.h" />
+    <ClInclude Include="src\soter\openssl\pkcs7err.h" />
+    <ClInclude Include="src\soter\openssl\rand.h" />
+    <ClInclude Include="src\soter\openssl\randerr.h" />
+    <ClInclude Include="src\soter\openssl\rc2.h" />
+    <ClInclude Include="src\soter\openssl\rc4.h" />
+    <ClInclude Include="src\soter\openssl\rc5.h" />
+    <ClInclude Include="src\soter\openssl\ripemd.h" />
+    <ClInclude Include="src\soter\openssl\rsa.h" />
+    <ClInclude Include="src\soter\openssl\rsaerr.h" />
+    <ClInclude Include="src\soter\openssl\safestack.h" />
+    <ClInclude Include="src\soter\openssl\seed.h" />
+    <ClInclude Include="src\soter\openssl\sha.h" />
+    <ClInclude Include="src\soter\openssl\soter_ecdsa_common.h" />
+    <ClInclude Include="src\soter\openssl\soter_engine.h" />
+    <ClInclude Include="src\soter\openssl\soter_rsa_common.h" />
+    <ClInclude Include="src\soter\openssl\srp.h" />
+    <ClInclude Include="src\soter\openssl\srtp.h" />
+    <ClInclude Include="src\soter\openssl\ssl.h" />
+    <ClInclude Include="src\soter\openssl\ssl2.h" />
+    <ClInclude Include="src\soter\openssl\ssl3.h" />
+    <ClInclude Include="src\soter\openssl\sslerr.h" />
+    <ClInclude Include="src\soter\openssl\stack.h" />
+    <ClInclude Include="src\soter\openssl\store.h" />
+    <ClInclude Include="src\soter\openssl\storeerr.h" />
+    <ClInclude Include="src\soter\openssl\symhacks.h" />
+    <ClInclude Include="src\soter\openssl\tls1.h" />
+    <ClInclude Include="src\soter\openssl\ts.h" />
+    <ClInclude Include="src\soter\openssl\tserr.h" />
+    <ClInclude Include="src\soter\openssl\txt_db.h" />
+    <ClInclude Include="src\soter\openssl\ui.h" />
+    <ClInclude Include="src\soter\openssl\uierr.h" />
+    <ClInclude Include="src\soter\openssl\whrlpool.h" />
+    <ClInclude Include="src\soter\openssl\x509.h" />
+    <ClInclude Include="src\soter\openssl\x509err.h" />
+    <ClInclude Include="src\soter\openssl\x509v3.h" />
+    <ClInclude Include="src\soter\openssl\x509v3err.h" />
+    <ClInclude Include="src\soter\openssl\x509_vfy.h" />
+    <ClInclude Include="src\soter\openssl\__DECC_INCLUDE_EPILOGUE.H" />
+    <ClInclude Include="src\soter\openssl\__DECC_INCLUDE_PROLOGUE.H" />
+    <ClInclude Include="src\soter\soter.h" />
+    <ClInclude Include="src\soter\soter_asym_cipher.h" />
+    <ClInclude Include="src\soter\soter_asym_ka.h" />
+    <ClInclude Include="src\soter\soter_asym_sign.h" />
+    <ClInclude Include="src\soter\soter_container.h" />
+    <ClInclude Include="src\soter\soter_crc32.h" />
+    <ClInclude Include="src\soter\soter_ec_key.h" />
+    <ClInclude Include="src\soter\soter_hash.h" />
+    <ClInclude Include="src\soter\soter_hmac.h" />
+    <ClInclude Include="src\soter\soter_kdf.h" />
+    <ClInclude Include="src\soter\soter_rand.h" />
+    <ClInclude Include="src\soter\soter_rsa_key.h" />
+    <ClInclude Include="src\soter\soter_rsa_key_pair_gen.h" />
+    <ClInclude Include="src\soter\soter_sign_ecdsa.h" />
+    <ClInclude Include="src\soter\soter_sign_rsa.h" />
+    <ClInclude Include="src\soter\soter_sym.h" />
+    <ClInclude Include="src\soter\soter_t.h" />
+    <ClInclude Include="src\themis\error.h" />
+    <ClInclude Include="src\themis\message.h" />
+    <ClInclude Include="src\themis\portable_endian.h" />
+    <ClInclude Include="src\themis\secure_cell.h" />
+    <ClInclude Include="src\themis\secure_cell_alg.h" />
+    <ClInclude Include="src\themis\secure_comparator.h" />
+    <ClInclude Include="src\themis\secure_comparator_t.h" />
+    <ClInclude Include="src\themis\secure_message.h" />
+    <ClInclude Include="src\themis\secure_message_wrapper.h" />
+    <ClInclude Include="src\themis\secure_session.h" />
+    <ClInclude Include="src\themis\secure_session_peer.h" />
+    <ClInclude Include="src\themis\secure_session_t.h" />
+    <ClInclude Include="src\themis\secure_session_utils.h" />
+    <ClInclude Include="src\themis\sym_enc_message.h" />
+    <ClInclude Include="src\themis\themis.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets" Condition="Exists('packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets'))" />
+  </Target>
+</Project>
