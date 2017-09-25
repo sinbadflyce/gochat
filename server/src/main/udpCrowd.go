@@ -102,8 +102,12 @@ func (crowd *UDPCrowd) MessageArrived(peerAddr *net.UDPAddr, conn *net.UDPConn, 
 		}
 
 		// keep client by name
-		crowd.clients[name] = client
-		fmt.Printf("UDP create client with name = %s, sessionId = %s\n", client.name, client.id)
+		if client != nil {
+			crowd.clients[name] = client
+			fmt.Printf("UDP create client with name = %s, sessionId = %s\n", client.name, client.id)
+		} else {
+			fmt.Printf("UDP cannot create client with name = %s\n", name)
+		}
 
 		// wire is established
 	} else if wire.Which == Wire_UDP_ESTABLISHED {

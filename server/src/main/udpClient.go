@@ -18,6 +18,11 @@ type UDPClient struct {
 // UDPClient.send via wire ...
 func (client *UDPClient) send(wire *Wire) {
 
+	if client == nil {
+		fmt.Printf("Client is not available\n")
+		return
+	}
+
 	// check to be available client connection
 	if client.conn == nil {
 		fmt.Printf("Client %s doesn't connect yet\n", client.name)

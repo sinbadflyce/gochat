@@ -4,8 +4,8 @@ import CocoaAsyncSocket
 
 class Network: WebSocketDelegate {
 
-    static var address = "ws://127.0.0.1:8000/ws"
-    //static var address = "ws://192.168.2.135:8000/ws"
+    //static var address = "ws://sinbadflyce.com:8000/ws"
+    static var address = "ws://192.168.2.135:8000/ws"
 
     static let shared = Network()
 
@@ -46,11 +46,13 @@ class Network: WebSocketDelegate {
 
 class UDPNetwork: NSObject {
     
-    static var host = "127.0.0.1"
-    //static var host = "192.168.2.135"
+    //static var host = "sinbadflyce.com"
+    static var host = "192.168.2.135"
     static var port: UInt16 = 8001
     
     private var udpSocket: GCDAsyncUdpSocket?
+    
+    var postBuffer: Data = Data()
     
     func connect() {
         self.udpSocket = GCDAsyncUdpSocket(delegate: self, delegateQueue: DispatchQueue.main)
@@ -93,6 +95,14 @@ extension UDPNetwork: GCDAsyncUdpSocketDelegate {
         _ sock: GCDAsyncUdpSocket, didReceive data: Data, fromAddress address: Data, withFilterContext filterContext: Any?) {
         
         print("UDP didReceive \(data.count) from server")
-        WireBackend.shared.didReceiveFromServer(data)
+        
+        postBuffer.append(data)
+        
+        if data.count == 4096 {
+            print("UDP keep waiting for next data")
+        } else {
+            WireBackend.shared.didReceiveFromServer(postBuffer)
+            postBuffer.removeAll()
+        }
     }
 }
