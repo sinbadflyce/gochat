@@ -91,7 +91,7 @@ func (server *UDPServer) CloseClient(sessionID string) {
 	}
 
 	// remove
-	server.udpCrowd.clients[sessionID] = nil
+	delete(server.udpCrowd.clients, sessionID)
 	fmt.Printf("Remove client with session id = %s\n", sessionID)
 
 	_, ok = server.udpCrowd.clients[c1.name]
@@ -102,6 +102,6 @@ func (server *UDPServer) CloseClient(sessionID string) {
 	}
 
 	// remove
-	server.udpCrowd.clients[c1.name] = nil
+	delete(server.udpCrowd.clients, c1.name)
 	fmt.Printf("Remove client with session id = %s\n", c1.name)
 }
