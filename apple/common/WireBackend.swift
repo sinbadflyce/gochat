@@ -173,6 +173,7 @@ class WireBackend {
     func send(data: Data, peerId: String) {
         if crypto!.isSessionEstablished(peerId: peerId) {
             encryptAndSend(data: data, peerId: peerId)
+            queues.removeValue(forKey: peerId)
         } else {
             enqueue(data: data, peerId: peerId)
         }

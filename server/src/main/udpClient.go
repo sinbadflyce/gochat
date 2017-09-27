@@ -47,7 +47,7 @@ func (client *UDPClient) send(wire *Wire) {
 	for len > 0 {
 
 		// UDP max bytes to send
-		var bysend = 4096
+		var bysend = 1024
 
 		// less than, use len
 		if len < bysend {

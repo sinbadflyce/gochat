@@ -29,8 +29,11 @@ class DetailViewController: UIViewController {
             print("could not create Text")
             return
         }
-        
-        VoipBackend.udpSendText(body, peerId: whom)
+        #if UDP_NETWORK
+            VoipBackend.udpSendText(body, peerId: whom)
+        #else
+            VoipBackend.sendText(body, peerId: whom)
+        #endif
         input.text = ""
     }
 
