@@ -19,7 +19,7 @@ func (crowd *UDPCrowd) Init() {
 
 	// make udp crowd properties
 	crowd.clients = make(map[string]*UDPClient)
-	crowd.queue = make(chan Wire, 5)
+	crowd.queue = make(chan Wire, 10)
 
 	// routine for messages queue
 	go func() {
