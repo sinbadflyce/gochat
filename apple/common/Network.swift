@@ -33,6 +33,7 @@ class Network: WebSocketDelegate {
 
     func websocketDidDisconnect(_ websocket: Starscream.WebSocket, error: NSError?) {
         EventBus.post(.disconnected)
+        print("websocket did receive disconnect")
     }
 
     func websocketDidReceiveData(_ websocket: Starscream.WebSocket, data: Data) {
@@ -84,7 +85,6 @@ extension UDPNetwork: GCDAsyncUdpSocketDelegate {
     }
     
     func udpSocket(_ sock: GCDAsyncUdpSocket, didSendDataWithTag tag: Int) {
-        print("UDP didSendDataWithTag \(tag)")
     }
     
     func udpSocket(_ sock: GCDAsyncUdpSocket, didNotSendDataWithTag tag: Int, dueToError error: Error?) {
@@ -94,13 +94,13 @@ extension UDPNetwork: GCDAsyncUdpSocketDelegate {
     func udpSocket(
         _ sock: GCDAsyncUdpSocket, didReceive data: Data, fromAddress address: Data, withFilterContext filterContext: Any?) {
         
-        print("UDP didReceive \(data.count) from server")
+        let kChunkSize = 1024
         
+        // Append data
         postBuffer.append(data)
         
-        if data.count == 4096 {
-            print("UDP keep waiting for next data")
-        } else {
+        // Only did receive if not is chunk size
+        if data.count != kChunkSize {
             WireBackend.shared.didReceiveFromServer(postBuffer)
             postBuffer.removeAll()
         }

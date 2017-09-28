@@ -45,6 +45,7 @@ func connected(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("TCP error close-connection:", err)
 				crowd.updatePresence(sessionID, false)
 				udpServer.CloseClient(sessionID)
+				conn.Close()
 				return
 			}
 

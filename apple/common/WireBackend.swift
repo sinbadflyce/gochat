@@ -62,10 +62,12 @@ class WireBackend {
     }
 
     func handshook(with peerId: String) {
-        if let q = queues[peerId] {
+        if var q = queues[peerId] {
             for hold in q {
                 encryptAndSend(data: hold.data, peerId: peerId)
             }
+            q.removeAll()
+            queues[peerId] = q
         }
     }
 
@@ -90,7 +92,7 @@ class WireBackend {
             q!.append(hold)
         }
     }
-
+    
     // communication with server
 
     func didReceiveFromServer(_ data: Data) {
@@ -103,7 +105,9 @@ class WireBackend {
             Model.shared.getOfficeContactList()
         }
 
-        print("read \(data.count) bytes for \(wire.which) from server")
+        if wire.which != .payload {
+            print("read \(data.count) bytes for \(wire.which) from server")
+        }
         do {
             switch wire.which {
             case .contacts:             Model.shared.didReceiveContacts(wire.contacts)
@@ -173,7 +177,6 @@ class WireBackend {
     func send(data: Data, peerId: String) {
         if crypto!.isSessionEstablished(peerId: peerId) {
             encryptAndSend(data: data, peerId: peerId)
-            queues.removeValue(forKey: peerId)
         } else {
             enqueue(data: data, peerId: peerId)
         }
@@ -182,8 +185,6 @@ class WireBackend {
     func udpSend(data: Data, peerId: String) {
         if crypto!.isSessionEstablished(peerId: peerId) {
             encryptAndUdpSend(data: data, peerId: peerId)
-        } else {
-            enqueue(data: data, peerId: peerId)
         }
     }
     

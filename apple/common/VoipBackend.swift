@@ -37,7 +37,10 @@ class VoipBackend {
             return
         }
         
-        print("read \(data.count) bytes for \(voip.which) from \(peerId)")
+        if voip.which != .av {
+            print("read \(data.count) bytes for \(voip.which) from \(peerId)")
+        }
+        
         switch voip.which {
         case .text: Model.shared.didReceiveText(body: voip.payload, from: peerId)
         case .av: getsAV(voip)

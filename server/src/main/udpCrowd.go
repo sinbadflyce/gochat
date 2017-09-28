@@ -125,9 +125,20 @@ func (crowd *UDPCrowd) MessageArrived(peerAddr *net.UDPAddr, conn *net.UDPConn, 
 		fmt.Printf("UDP create client with name = %s, sessionId = %s\n", c.name, c.id)
 	}
 
-	// logging
-	fmt.Printf("UDP crowd received wire, which = %d\n", wire.Which)
-
 	// put wire to the queue
 	crowd.queue <- *wire
+}
+
+// UpdateClientSession ...
+func (crowd *UDPCrowd) UpdateClientSession(sessionID string) {
+
+	// get client
+	client, ok := crowd.clients[sessionID]
+	if !ok {
+		fmt.Println("UDP can't find " + sessionID)
+		return
+	}
+
+	// re-assign
+	crowd.clients[sessionID] = client
 }

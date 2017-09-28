@@ -19,13 +19,13 @@ type UDPClient struct {
 func (client *UDPClient) send(wire *Wire) {
 
 	if client == nil {
-		fmt.Printf("Client is not available\n")
+		fmt.Printf("UDP client is not available\n")
 		return
 	}
 
 	// check to be available client connection
 	if client.conn == nil {
-		fmt.Printf("Client %s doesn't connect yet\n", client.name)
+		fmt.Printf("UDP client %s doesn't connect yet\n", client.name)
 		return
 	}
 
@@ -34,7 +34,7 @@ func (client *UDPClient) send(wire *Wire) {
 
 	// error
 	if err != nil {
-		fmt.Printf("Proto.Marshal gets error %s\n", err.Error())
+		fmt.Printf("UDP Proto.Marshal gets error %s\n", err.Error())
 		return
 	}
 
@@ -58,16 +58,13 @@ func (client *UDPClient) send(wire *Wire) {
 		bytes := data[totalSent:(totalSent + bysend)]
 
 		// send
-		n, err := client.conn.WriteToUDP(bytes, client.address)
+		_, err := client.conn.WriteToUDP(bytes, client.address)
 
 		// error
 		if err != nil {
-			fmt.Printf("WriteToUDP gets error %s\n", err.Error())
+			fmt.Printf("UDP WriteToUDP gets error %s\n", err.Error())
 			return
 		}
-
-		// logging
-		fmt.Printf("UDP sent %d bytes to from %s to %s\n", n, wire.From, client.name)
 
 		totalSent = totalSent + bysend
 		len = len - bysend

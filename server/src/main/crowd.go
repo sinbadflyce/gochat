@@ -69,9 +69,10 @@ func (crowd *Crowd) messageArrived(conn *websocket.Conn, wire *Wire, sessionId s
 		if client == nil && sessionId != "" {
 			fmt.Println("no client for " + sessionId)
 			return sessionId, false
-		} else {
-			fmt.Println("Session Id is empty, which = " + wire.GetWhich().String())
 		}
+
+		// session id is empty
+		fmt.Println("Session Id is empty, which = " + wire.GetWhich().String())
 	}
 
 	switch wire.GetWhich() {

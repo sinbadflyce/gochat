@@ -57,9 +57,6 @@ func (server *UDPServer) HandleReadData() {
 			return
 		}
 
-		// bytes are read
-		fmt.Printf("UDP server received bytes lenght: %d\n", n)
-
 		// copy
 		readBuf := make([]byte, n)
 		copy(readBuf, server.buffer)

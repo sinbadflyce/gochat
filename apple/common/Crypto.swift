@@ -42,7 +42,7 @@ class Crypto {
         return peer.status == .sessionEstablished
     }
 
-    private func peer(_ peerId: String) -> Peer {
+     private func peer(_ peerId: String) -> Peer {
         if peers[peerId] == nil {
             let peer = Peer(peerId: peerId)
             peers[peerId] = peer
@@ -55,6 +55,11 @@ class Crypto {
         peer.setServerPublicKey(key: key, isResponse: isResponse)
     }
 
+    func resendPublicKey(peerId: String, isResponse: Bool) {
+        let peer = self.peer(peerId)
+        peer.sendPublicKey(isResponse: isResponse)
+    }
+    
     func didReceivePayload(_ payload: Data, from peerId: String) {
         peer(peerId).didReceive(payload)
     }
@@ -142,10 +147,14 @@ private class Peer {
     func didReceive(_ data: Data) {
         
         guard let s =  session else {
+            print("Peer [\(self.peerId)] has session being null")
+            self.status = .begun
             return
         }
         
+        // logging status
         print("status is \(status)")
+        
         do {
             let decryptedMessage = try s.unwrapData(data)
             if !session!.isSessionEstablished() { // themis says: send this back
