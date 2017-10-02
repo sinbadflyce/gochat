@@ -59,6 +59,7 @@ CClearKeepDlg::CClearKeepDlg(CWnd* pParent /*=NULL*/)
 void CClearKeepDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST_CONTACT, m_ContactListCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CClearKeepDlg, CDialogEx)
@@ -84,24 +85,28 @@ int CClearKeepDlg::InitLogging()
 int CClearKeepDlg::Init()
 {
 	// Init logging to trace all information
-	//InitLogging();
+	InitLogging();
+
+	
+
+	// Init Themis class
+	m_Themis = CThemis::GetSingleTon();
+	m_LoginDlg = new CLoginDlg();
 
 	// if login return fail, app will exit or request register
 	if (!CallLogin())
 	{
 		m_bConnected = false;
 		EndDialog(0);
+		// bat cai flash nao do len chay trong timeout 5s de thuc hien checklog in [9/29/2017 Canhnh]
+
 	}
 	else
 	{
-		m_bConnected = true;
+		m_bIsLogin = true;
 	}
 
 	ShowWindow(SW_SHOW);
-
-	// Set default values [9/19/2017 Canhnh]
-	CComboBox* pStatus = (CComboBox*)GetDlgItem(IDC_MAIN_STATUS);
-	pStatus->SetCurSel(0);
 
 	return 0;
 }
@@ -109,8 +114,8 @@ int CClearKeepDlg::Init()
 bool CClearKeepDlg::CallLogin()
 {
 	SPD_LOG_INFO("CKLog", "Request login");
-	CLoginDlg m_LoginDlg;
-	if (m_LoginDlg.DoModal() == IDCANCEL)
+	
+	if (m_LoginDlg->DoModal() == IDCANCEL)
 	{
 		return false;
 	}
@@ -118,12 +123,23 @@ bool CClearKeepDlg::CallLogin()
 	return true;
 }
 
-LOGIN_STATUS CClearKeepDlg::doLogin()
+LOGIN_STATUS CClearKeepDlg::doLogin(const string strName, const string strPassword)
 {
 	// Use Themis lib to send and check login information with server
+	LOGIN_STATUS nResult = m_Themis->doConnnection();
+	if (nResult != login_success)
+	{
+		return nResult;
+	}
+	
+	m_Themis->doLogin(strName, strPassword);
 
+	// - luu gia tri cua Contact Login
+	strUsername = strName;
+	strPass = strPassword;
 
-	return login_success;
+	AfxBeginThread(doCheckLogin, this);
+	return nResult;
 }
 
 BOOL CClearKeepDlg::OnInitDialog()
@@ -212,11 +228,59 @@ HCURSOR CClearKeepDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+UINT CClearKeepDlg::doCheckLogin(void * pClass)
+{
+	CClearKeepDlg* pThis = (CClearKeepDlg*)pClass;
+	int n = 0;
+	while (n < 1000)
+	{
+		if (pThis->m_bIsLogin)
+		{
+			pThis->doLoginProcess();
+			return 0;
+		}
+		Sleep(100);
+		n++;
+	}
+	return 0;
+}
 
+void CClearKeepDlg::doLoginProcess()
+{
+	// Main Account loading
+	CString strName(strUsername.c_str());
+	SetDlgItemText(IDC_MAIN_USERNAME, strName);
+	CComboBox* pStatus = (CComboBox*)GetDlgItem(IDC_MAIN_STATUS);
+	pStatus->SetCurSel(AccountStatus::status_Online);
+
+
+	// Contact list loading
+	InitTabContact();
+
+}
+
+void CClearKeepDlg::InitTabContact()
+{
+	if (m_Themis->m_ListContact.size() > 0)
+	{
+		for (unsigned i = 0; i < m_Themis->m_ListContact.size(); i++)
+		{
+			Contact pCtTemp = m_Themis->m_ListContact.at(i);
+			CString strAccName(pCtTemp.name().c_str());
+			m_ContactListCtrl.AddString(strAccName);
+		}
+	}
+}
 
 void CClearKeepDlg::OnClose()
 {
 	// TODO: Add your message handler code here and/or call default
-	
+	if (m_Themis)
+		delete m_Themis;
+	if (m_LoginDlg)
+	{
+		delete m_LoginDlg;
+	}
+
 	CDialogEx::OnClose();
 }

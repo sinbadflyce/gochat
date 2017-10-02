@@ -16,11 +16,17 @@
     <Filter Include="ProtobufMsg">
       <UniqueIdentifier>{2bd7a1cc-86ec-4ba5-8a8e-2a9fc11db63f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tcpsocket">
-      <UniqueIdentifier>{d65b8865-d719-40fb-a16f-98966df2a09e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Logging">
       <UniqueIdentifier>{1703fbcd-adde-4c4f-a8f3-812c47adcf53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Websocket">
+      <UniqueIdentifier>{d65b8865-d719-40fb-a16f-98966df2a09e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinyThread">
+      <UniqueIdentifier>{b5016d86-da11-4a66-9b20-cfbe57a83a7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Themispp">
+      <UniqueIdentifier>{5a00fc1f-18e1-4929-8f44-40cfdeaa0d0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,11 +63,35 @@
     <ClInclude Include="Includes\protobuf\wire.pb.h">
       <Filter>ProtobufMsg</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\tcpsocket\TcpSocket.h">
-      <Filter>Tcpsocket</Filter>
+    <ClInclude Include="Includes\easyclient\easywsclient.hpp">
+      <Filter>Websocket</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\tcpsocket\GTCPSocket.h">
-      <Filter>Tcpsocket</Filter>
+    <ClInclude Include="Includes\tinythread\fast_mutex.h">
+      <Filter>TinyThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\tinythread\tinythread.h">
+      <Filter>TinyThread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\exception.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_cell.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_comparator.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_keygen.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_message.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_rand.hpp">
+      <Filter>Themispp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_session.hpp">
+      <Filter>Themispp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,23 +110,23 @@
     <ClCompile Include="CThemis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\boost_system-src.error_code.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\wrapper\logging.cpp">
+      <Filter>Logging</Filter>
+    </ClCompile>
     <ClCompile Include="Includes\protobuf\voip.pb.cc">
       <Filter>ProtobufMsg</Filter>
     </ClCompile>
     <ClCompile Include="Includes\protobuf\wire.pb.cc">
       <Filter>ProtobufMsg</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\boost_system-src.error_code.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Includes\easyclient\easywsclient.cpp">
+      <Filter>Websocket</Filter>
     </ClCompile>
-    <ClCompile Include="Includes\tcpsocket\TcpSocket.cpp">
-      <Filter>Tcpsocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\tcpsocket\GTCPSocket.cpp">
-      <Filter>Tcpsocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\wrapper\logging.cpp">
-      <Filter>Logging</Filter>
+    <ClCompile Include="Includes\tinythread\tinythread.cpp">
+      <Filter>TinyThread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

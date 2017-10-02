@@ -90,6 +90,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>D:\MyProjects\ClearKeep\Samples\Themis\Themis\src;D:\MyProjects\ClearKeep\Samples\Themis\Themis\src\themis;D:\MyProjects\ClearKeep\Samples\Themis\Themis\src\soter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -98,7 +99,7 @@
       <AdditionalDependencies>libeay32.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>D:\MyProjects\ClearKeep\Samples\Themis\Themis\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./../ThirtParty/Openssl/lib</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -313,17 +314,6 @@
     <ClInclude Include="src\themis\sym_enc_message.h" />
     <ClInclude Include="src\themis\themis.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets" Condition="Exists('packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\OpenSSL.Static.Uwp.1.0.2.1\build\native\OpenSSL.Static.Uwp.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

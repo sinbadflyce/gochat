@@ -16,6 +16,9 @@ CLoginDlg::CLoginDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_LOGIN, pParent)
 {
 	pMainDlg = (CClearKeepDlg*)AfxGetMainWnd();
+
+	//SetDlgItemText(IDC_ED_USERNAME, _T("minh"));
+	//SetDlgItemText(IDC_ED_PW, _T("matkhau"));
 }
 
 CLoginDlg::~CLoginDlg()
@@ -29,6 +32,15 @@ void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ED_PW, m_PasswordCtrl);
 }
 
+
+BOOL CLoginDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	
+	SetDlgItemText(IDC_ED_USERNAME, _T("minh"));
+	SetDlgItemText(IDC_ED_PW, _T("xxx"));
+	return TRUE;
+}
 
 BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CLoginDlg::OnBnClickedOk)
@@ -53,9 +65,19 @@ void CLoginDlg::OnBnClickedOk()
 		return;
 	}
 
+	// Convert a TCHAR string to a LPCSTR
+	CT2CA pszConvertedAnsiString1(strUn);
+	// construct a std::string using the LPCSTR input
+	std::string strUserName(pszConvertedAnsiString1);
+
+	// Convert a TCHAR string to a LPCSTR
+	CT2CA pszConvertedAnsiString2(strPw);
+	// construct a std::string using the LPCSTR input
+	std::string strPassword(pszConvertedAnsiString2);
+
 	if (pMainDlg)
 	{
-		LOGIN_STATUS res = pMainDlg->doLogin();
+		LOGIN_STATUS res = pMainDlg->doLogin(strUserName, strPassword);
 		switch (res)
 		{
 		case login_success:
@@ -121,6 +143,7 @@ void CLoginDlg::showNotifyCheck(bool b_show)
 HBRUSH CLoginDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+	// conflict when use gdi32.lib to draw that. NOT solved it YET [9/25/2017 Canhnh]
 	
 	switch (nCtlColor)
 	{
@@ -134,7 +157,7 @@ HBRUSH CLoginDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	default:
 		return CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 	}
-
+	
 	return hbr;
 }
 

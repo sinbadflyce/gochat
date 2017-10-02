@@ -5,14 +5,9 @@
 #pragma once
 #include "CThemis.h"
 #include "LoginDlg.h"
+#include "afxcmn.h"
+#include "afxwin.h"
 
-enum LOGIN_STATUS {
-	login_success,
-	login_fail_username,
-	login_fail_password,
-	login_error, //connection error...
-	login_unknow_error
-};
 
 // CClearKeepDlg dialog
 class CClearKeepDlg : public CDialogEx
@@ -31,9 +26,9 @@ public:
 
 public:
 // Khai bao cac bien de su dung [9/19/2017 Canhnh]
-	CThemis m_Themis;
-	CString strUsername;
-	CString strPass;
+	CThemis* m_Themis;
+	string strUsername;
+	string strPass;
 	bool m_bConnected;
 	
 	// Init all varial and function [9/19/2017 Canhnh]
@@ -45,7 +40,7 @@ public:
 
 	// Connect server to login [9/19/2017 Canhnh]
 	// Values return: 
-	LOGIN_STATUS doLogin();
+	LOGIN_STATUS doLogin(const string strName, const string strPassword);
 
 
 // Implementation
@@ -59,6 +54,14 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+	// - thread check login
+	static UINT doCheckLogin(void * pClass);
+	bool m_bIsLogin;
+	void doLoginProcess();
+	CLoginDlg *m_LoginDlg;
+
+	void InitTabContact();
 public:
 	afx_msg void OnClose();
+	CListBox m_ContactListCtrl;
 };
