@@ -60,8 +60,8 @@ class Crypto {
         peer.sendPublicKey(isResponse: isResponse)
     }
     
-    func didReceivePayload(_ payload: Data, from peerId: String) {
-        peer(peerId).didReceive(payload)
+    func didReceivePayload(_ payload: Data, from peerId: String, isUDP: Bool = false) {
+        peer(peerId).didReceive(payload, isUDP: isUDP)
     }
 
     func encrypt(data: Data, peerId: String) -> Data? {
@@ -120,6 +120,7 @@ private class Peer {
     func setServerPublicKey(key: Data, isResponse: Bool) {
         transport.setupKeys(peerId, serverPublicKey: key)
         session = TSSession(userId: clientIdData, privateKey: clientPrivateKey, callbacks: transport)
+        print("[CRYPTO] create crypto session on peerId: \(peerId)")
         if isResponse {
             connect()
         } else {
@@ -128,6 +129,11 @@ private class Peer {
     }
 
     func sendPublicKey(isResponse: Bool) {
+        
+        // logging
+        isResponse ? print("[KEY] response public key to \(peerId)") : print("[KEY] send public key to \(peerId)")
+        
+        // send or response
         status = .publicKeySent
         WireBackend.shared.sendPublicKey(clientPublicKey!, to: peerId, isResponse: isResponse)
     }
@@ -135,41 +141,46 @@ private class Peer {
     func connect() {
         do {
             guard let message = try session?.connectRequest() else {
-                print("could not connectRequest")
+                print("[CRYPTO] error: could not connectRequest")
                 return
             }
+            
+            print("[CRYPTO] success to connect crypto session on peerId: \(peerId)")
             WireBackend.shared.sendHandshake(message: message, to: peerId)
         } catch {
-            print(error.localizedDescription)
+            print("[CRYPTO] error: \(error.localizedDescription)")
         }
     }
 
-    func didReceive(_ data: Data) {
+    func didReceive(_ data: Data, isUDP: Bool = false) {
         
         guard let s =  session else {
-            print("Peer [\(self.peerId)] has session being null")
+            print("\(isUDP ? "[UDP]" : "[TCP]") Peer [\(self.peerId)] has session being null")
             self.status = .begun
             return
         }
         
         // logging status
-        print("status is \(status)")
+        if status != .sessionEstablished {
+            print("\(isUDP ? "[UDP]" : "[TCP]") status is \(status)")
+        }
         
         do {
             let decryptedMessage = try s.unwrapData(data)
             if !session!.isSessionEstablished() { // themis says: send this back
-                print("themis says: send this back")
+                print("\(isUDP ? "[UDP]" : "[TCP]") themis says: send this back")
                 WireBackend.shared.sendHandshake(message: decryptedMessage, to: peerId)
             } else if status != .sessionEstablished { // themis says: session now established
-                print("themis says: session now established")
+                print("\(isUDP ? "[UDP]" : "[TCP]") themis says: session now established")
                 didEstablishSession(sendThisToo: decryptedMessage)
             } else { // themis says: here is the decrypted message
-                print("themis says: here is the decrypted message")
+                //print("themis says: here is the decrypted message")
                 VoipBackend.didReceiveFromPeer(decryptedMessage, from: peerId)
             }
         } catch {
             if let session = session, session.isSessionEstablished() {
-                print("themis says: session now established 2")
+                print("\(isUDP ? "[UDP]" : "[TCP]") session in error: \(error.localizedDescription)")
+                print("\(isUDP ? "[UDP]" : "[TCP]") themis says: session now established 2")
                 didEstablishSession() // themis says: session now established (it can happen this way too)
             } else {
                 print(error.localizedDescription)

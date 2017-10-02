@@ -160,6 +160,15 @@ class VoipBackend {
     
     static func sendVideo(_ id: IOID, _ data: NSData, _ callback: @escaping FuncVV) {
         assert_video_capture_queue()
+        
+        #if TCP_NETWORK
+        #else
+            if !WireBackend.shared.isUdpSessionEstablished {
+                WireBackend.shared.ensureUdpSessionEstablished()
+                return
+            }
+        #endif
+
         do {
             let image = try Image.Builder().setData(data as Data).build()
             let media = try VideoSample.Builder().setImage(image).build()
@@ -184,6 +193,14 @@ class VoipBackend {
     static func sendAudio(_ id: IOID, _ data: NSData, _ callback: @escaping FuncVV) {
         assert_audio_capture_queue()
         
+        #if TCP_NETWORK
+        #else
+            if !WireBackend.shared.isUdpSessionEstablished {
+                WireBackend.shared.ensureUdpSessionEstablished()
+                return
+            }
+        #endif
+
         do {
             let image = try Image.Builder().setData(data as Data).build()
             let media = try AudioSample.Builder().setImage(image).build()

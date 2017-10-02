@@ -2,18 +2,32 @@ import Foundation
 import Starscream
 import CocoaAsyncSocket
 
+class NetworkSetting {
+    
+    static var host = "127.0.0.1"
+    static var tcpPort = 8000
+    static var udpPort = 8001
+    
+    static func update(host: String, tcpPort: Int, udpPort: Int = tcpPort + 1) {
+        self.host = host
+        self.tcpPort = tcpPort
+        self.udpPort = udpPort
+    }
+    
+    static var address: String {
+        return "ws://\(self.host):\(self.tcpPort)/ws"
+    }
+}
+
 class Network: WebSocketDelegate {
-
-    //static var address = "ws://sinbadflyce.com:8000/ws"
-    static var address = "ws://192.168.2.135:8000/ws"
-
+    
     static let shared = Network()
 
     private var websocket: WebSocket?
 
     func connect() {
-        guard let url = URL(string: Network.address) else {
-            print("could not create url from " + Network.address)
+        guard let url = URL(string: NetworkSetting.address) else {
+            print("[TCP] could not create url from " + NetworkSetting.address)
             return
         }
         websocket = WebSocket(url: url)
@@ -24,7 +38,7 @@ class Network: WebSocketDelegate {
     func send(_ data: Data) {
         websocket?.write(data: data)
     }
-
+    
     // websocket delegate
 
     func websocketDidConnect(_ websocket: Starscream.WebSocket) {
@@ -47,13 +61,29 @@ class Network: WebSocketDelegate {
 
 class UDPNetwork: NSObject {
     
-    //static var host = "sinbadflyce.com"
-    static var host = "192.168.2.135"
-    static var port: UInt16 = 8001
-    
     private var udpSocket: GCDAsyncUdpSocket?
+    private var isResponsedAUTH = false
+    private var isResponsedESTA = false
     
     var postBuffer: Data = Data()
+    
+    var isUdpSessionEstablished: Bool {
+        get {
+            return isResponsedAUTH == true && isResponsedESTA == true
+        }
+    }
+    
+    func responseAUTH(value: Bool) {
+        isResponsedAUTH = value
+    }
+    
+    func responseESTA(value: Bool) {
+        isResponsedESTA = value
+    }
+
+    func ensureUdpSessionEstablished(completion: (Bool, Bool) -> (Void)) {
+        completion(isResponsedAUTH, isResponsedESTA)
+    }
     
     func connect() {
         self.udpSocket = GCDAsyncUdpSocket(delegate: self, delegateQueue: DispatchQueue.main)
@@ -70,18 +100,18 @@ class UDPNetwork: NSObject {
     
     func send(_ data: Data) {
         let tag = Int(Date.timeIntervalSinceReferenceDate)
-        udpSocket?.send(data, toHost: UDPNetwork.host, port: UDPNetwork.port, withTimeout: 30, tag: tag)
+        udpSocket?.send(data, toHost: NetworkSetting.host, port: UInt16(NetworkSetting.udpPort), withTimeout: 30, tag: tag)
     }
 }
 
 extension UDPNetwork: GCDAsyncUdpSocketDelegate {
     
     func udpSocket(_ sock: GCDAsyncUdpSocket, didConnectToAddress address: Data) {
-        print("UDP didConnectToAddress \(UDPNetwork.host):\(UDPNetwork.port)")
+        print("UDP didConnectToAddress \(NetworkSetting.host):\(NetworkSetting.udpPort)")
     }
     
     func udpSocket(_ sock: GCDAsyncUdpSocket, didNotConnect error: Error?) {
-        print("UDP didNotConnect \(UDPNetwork.host):\(UDPNetwork.port)")
+        print("UDP didNotConnect \(NetworkSetting.host):\(NetworkSetting.udpPort)")
     }
     
     func udpSocket(_ sock: GCDAsyncUdpSocket, didSendDataWithTag tag: Int) {
@@ -101,7 +131,7 @@ extension UDPNetwork: GCDAsyncUdpSocketDelegate {
         
         // Only did receive if not is chunk size
         if data.count != kChunkSize {
-            WireBackend.shared.didReceiveFromServer(postBuffer)
+            WireBackend.shared.didReceiveFromServer(postBuffer, isUDP: true)
             postBuffer.removeAll()
         }
     }

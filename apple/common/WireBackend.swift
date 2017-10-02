@@ -11,6 +11,11 @@ class WireBackend {
     private var queues = [String:[Hold]]()
     private var loginType: LoginType?
     
+    var isUdpSessionEstablished: Bool {
+        let res = udpNetwork.isUdpSessionEstablished
+        return res
+    }
+    
     func connect() {
         network.connect()
         udpNetwork.connect()
@@ -54,6 +59,9 @@ class WireBackend {
             key: haber.payload,
             peerId:haber.from,
             isResponse: isResponse)
+
+        // logging
+        print("[KEY] Received public key from \(haber.from)")
     }
     
     func sendHandshake(message: Data, to peerId: String) {
@@ -95,9 +103,9 @@ class WireBackend {
     
     // communication with server
 
-    func didReceiveFromServer(_ data: Data) {
+    func didReceiveFromServer(_ data: Data, isUDP: Bool = false) {
         guard let wire = try? Wire.parseFrom(data:data) else {
-            print("Could not deserialize wire")
+            print("\(isUDP ? "[UDP]" : "[TCP]") Could not deserialize wire")
             return
         }
         if let sid = wire.sessionId, sessionId == nil {
@@ -105,8 +113,22 @@ class WireBackend {
             Model.shared.getOfficeContactList()
         }
 
+        //-- UDP response
+        if wire.which == .loginResponse {
+            print("\(isUDP ? "[UDP]" : "[TCP]") read \(data.count) bytes for \(wire.which) from server")
+            self.udpNetwork.responseAUTH(value: true)
+            return
+        }
+
+        //-- UDP response
+        if wire.which == .udpEstablished {
+            print("\(isUDP ? "[UDP]" : "[TCP]") read \(data.count) bytes for \(wire.which) from server")
+            self.udpNetwork.responseESTA(value: true)
+            return
+        }
+        
         if wire.which != .payload {
-            print("read \(data.count) bytes for \(wire.which) from server")
+            print("\(isUDP ? "[UDP]" : "[TCP]") read \(data.count) bytes for \(wire.which) from server")
         }
         do {
             switch wire.which {
@@ -114,13 +136,13 @@ class WireBackend {
             case .presence:             Model.shared.didReceivePresence(wire)
             case .store:                try didReceiveStore(wire)
             case .handshake:            fallthrough
-            case .payload:              crypto!.didReceivePayload(wire.payload, from: wire.from)
+            case .payload:              crypto!.didReceivePayload(wire.payload, from: wire.from, isUDP: isUDP)
             case .publicKey:            fallthrough
             case .publicKeyResponse:    didReceivePublicKey(wire)
-            default:                    print("did not handle \(wire.which)")
+            default:                    print("\(isUDP ? "[UDP]" : "[TCP]") did not handle \(wire.which)")
             }
         } catch {
-            print(error.localizedDescription)
+            print("\(isUDP ? "[UDP]" : "[TCP]") error: \(error.localizedDescription)")
         }
     }
     
@@ -169,6 +191,39 @@ class WireBackend {
         sendUDPEstablished(sessionId: sessionId!, from: Auth.shared.username!)
     }
 
+    func ensureUdpSessionEstablished() {
+
+        // main thread
+        DispatchQueue.main.async {
+            
+            // firt one more check
+            if self.isUdpSessionEstablished {
+                return
+            }
+            
+            // ensure Udp Session Established
+            self.udpNetwork.ensureUdpSessionEstablished { (isResponsedAUTH: Bool , isResponsedESTA: Bool) -> (Void) in
+                
+                // resend UDP Authentication
+                if !isResponsedAUTH {
+                    if let login = Auth.shared.loginInfo {
+                        let wireBuilder = Wire.Builder().setLogin(login).setWhich(.login)
+                        print("UDP resend login")
+                        self.udpSend(wireBuilder)
+                    }
+                }
+                
+                // resend UDP Established
+                if !isResponsedESTA {
+                    if let sid = self.sessionId, let usn = Auth.shared.username {
+                        print("UDP established")
+                        self.sendUDPEstablished(sessionId: sid, from: usn)
+                    }
+                }
+            }
+        }
+    }
+    
     func sendContacts(_ contacts: [Contact]) {
         let wireBuilder = Wire.Builder().setContacts(contacts).setWhich(.contacts)
         send(wireBuilder)
@@ -205,5 +260,4 @@ class WireBackend {
         let payloadBuilder = Wire.Builder().setPayload(encrypted).setWhich(.payload).setTo(peerId)
         udpSend(payloadBuilder)
     }
-
 }

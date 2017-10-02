@@ -109,6 +109,13 @@ func (crowd *UDPCrowd) MessageArrived(peerAddr *net.UDPAddr, conn *net.UDPConn, 
 			fmt.Printf("UDP cannot create client with name = %s\n", name)
 		}
 
+		// response login
+		w := &Wire{
+			Which: Wire_LOGIN_RESPONSE,
+			To:    client.id,
+		}
+		client.send(w)
+
 		// wire is established
 	} else if wire.Which == Wire_UDP_ESTABLISHED {
 
@@ -123,6 +130,14 @@ func (crowd *UDPCrowd) MessageArrived(peerAddr *net.UDPAddr, conn *net.UDPConn, 
 		// keep client by session id
 		crowd.clients[wire.SessionId] = c
 		fmt.Printf("UDP create client with name = %s, sessionId = %s\n", c.name, c.id)
+
+		// response UDP established
+		w := &Wire{
+			Which:     Wire_UDP_ESTABLISHED,
+			SessionId: wire.SessionId,
+			To:        c.id,
+		}
+		c.send(w)
 	}
 
 	// put wire to the queue

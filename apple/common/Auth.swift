@@ -13,6 +13,7 @@ class Auth {
     var username: String?
     var password: String?
     var token: String?
+    var loginInfo: Login?
     
     private static let usernameKey  = "username"
     private static let passwordKey  = "password"
@@ -86,6 +87,7 @@ class Auth {
         do {
             let login = try loginBuilder.build()
             WireBackend.shared.login(login: login)
+            loginInfo = login
         } catch {
             //
         }

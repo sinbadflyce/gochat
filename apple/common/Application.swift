@@ -7,7 +7,9 @@ class Application : AppleApplicationDelegate {
     static let kCompressedPlayback = false
     static let kUncompressedPlayback = false
     
-    static let kServerIP = "kServerIP"
+    static let kTcpHost = "kTcpHost"
+    static let kTcpPort = "kTcpPort"
+    static let kUdpPort = "kUdpPort"
     static let kVideoWidth = "kVideoWidth"
     static let kVideoHeight = "kVideoHeight"
 
@@ -23,12 +25,17 @@ class Application : AppleApplicationDelegate {
         
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true]);
         
-        // server IP
+        // server: host, tcp and udp ports
+        let kTcpHost = UserDefaults.standard.string(forKey: Application.kTcpHost)
+        let kTcpPort = UserDefaults.standard.string(forKey: Application.kTcpPort)
+        let kUdpPort = UserDefaults.standard.string(forKey: Application.kUdpPort)
         
-        let serverIP = UserDefaults.standard.string(forKey: Application.kServerIP)
-        
-        if (serverIP != nil) {
-            Network.address = serverIP!
+        if let host = kTcpHost, let sTcpPort = kTcpPort, let tcpPort = Int(sTcpPort),
+            let sUdpPort = kUdpPort, let udpPort = Int(sUdpPort)  {
+            NetworkSetting.update(host: host, tcpPort: tcpPort, udpPort: udpPort)
+            print("[CK] Launch app with user setting, host = \(host), tcpPort = \(sTcpPort), udpPort = \(sUdpPort)")
+        } else {
+            print("[CK] Launch app with default host, ports")
         }
         
         // video dimension
