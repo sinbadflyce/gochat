@@ -21,6 +21,8 @@ class SettingsDismissSegue : UIStoryboardSegue {
 class SettingsViewController : UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var textFieldServerIP: UITextField!
+    @IBOutlet weak var textFieldTcpPort: UITextField!
+    @IBOutlet weak var textFieldUdpPort: UITextField!
     @IBOutlet weak var textFieldVideoWidth: UITextField!
     @IBOutlet weak var textFieldVideoHeight: UITextField!
  
@@ -36,12 +38,21 @@ class SettingsViewController : UITableViewController, UITextFieldDelegate {
     }
     
     override func viewDidLoad() {
-        textFieldServerIP.text = Network.address
+        textFieldServerIP.text = NetworkSetting.host
+        textFieldTcpPort.text = String(NetworkSetting.tcpPort)
+        textFieldUdpPort.text = String(NetworkSetting.udpPort)
         
         if let x = AV.shared.defaultVideoDimension {
             textFieldVideoWidth.text = String(x.width)
             textFieldVideoHeight.text = String(x.height)
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        textFieldServerIPAction(self)
+        textFieldTcpPortAction(self)
+        textFieldUdpPortAction(self)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -50,10 +61,20 @@ class SettingsViewController : UITableViewController, UITextFieldDelegate {
     }
 
     @IBAction func textFieldServerIPAction(_ sender: Any) {
-        UserDefaults.standard.set(textFieldServerIP.text, forKey: Application.kServerIP)
+        UserDefaults.standard.set(textFieldServerIP.text, forKey: Application.kHost)
         UserDefaults.standard.synchronize()
     }
-    
+
+    @IBAction func textFieldTcpPortAction(_ sender: Any) {
+        UserDefaults.standard.set(textFieldTcpPort.text, forKey: Application.kTcpPort)
+        UserDefaults.standard.synchronize()
+    }
+
+    @IBAction func textFieldUdpPortAction(_ sender: Any) {
+        UserDefaults.standard.set(textFieldUdpPort.text, forKey: Application.kUdpPort)
+        UserDefaults.standard.synchronize()
+    }
+
     @IBAction func textFieldVideoWidthAction(_ sender: Any) {
         guard let text = textFieldVideoWidth.text else { return }
         guard let width = Int32(text) else { return }

@@ -47,7 +47,7 @@ class SettingsViewController : NSViewController {
     }
     
     @IBAction func textFieldServerIPAction(_ sender: Any) {
-        UserDefaults.standard.set(textFieldServerIP.stringValue, forKey: AppDelegate.kTcpHost)
+        UserDefaults.standard.set(textFieldServerIP.stringValue, forKey: AppDelegate.kHost)
     }
     
     @IBAction func textFieldTcpPortAction(_ sender: Any) {

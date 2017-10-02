@@ -175,12 +175,13 @@ private class Peer {
                 didEstablishSession(sendThisToo: decryptedMessage)
             } else { // themis says: here is the decrypted message
                 //print("themis says: here is the decrypted message")
-                VoipBackend.didReceiveFromPeer(decryptedMessage, from: peerId)
+                VoipBackend.didReceiveFromPeer(decryptedMessage, from: peerId, isUDP: isUDP)
             }
         } catch {
             if let session = session, session.isSessionEstablished() {
                 print("\(isUDP ? "[UDP]" : "[TCP]") session in error: \(error.localizedDescription)")
                 print("\(isUDP ? "[UDP]" : "[TCP]") themis says: session now established 2")
+                
                 didEstablishSession() // themis says: session now established (it can happen this way too)
             } else {
                 print(error.localizedDescription)

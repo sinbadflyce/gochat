@@ -7,7 +7,7 @@ class Application : AppleApplicationDelegate {
     static let kCompressedPlayback = false
     static let kUncompressedPlayback = false
     
-    static let kTcpHost = "kTcpHost"
+    static let kHost = "kHost"
     static let kTcpPort = "kTcpPort"
     static let kUdpPort = "kUdpPort"
     static let kVideoWidth = "kVideoWidth"
@@ -26,7 +26,7 @@ class Application : AppleApplicationDelegate {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true]);
         
         // server: host, tcp and udp ports
-        let kTcpHost = UserDefaults.standard.string(forKey: Application.kTcpHost)
+        let kTcpHost = UserDefaults.standard.string(forKey: Application.kHost)
         let kTcpPort = UserDefaults.standard.string(forKey: Application.kTcpPort)
         let kUdpPort = UserDefaults.standard.string(forKey: Application.kUdpPort)
         

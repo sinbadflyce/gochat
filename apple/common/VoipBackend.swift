@@ -31,14 +31,14 @@ class VoipBackend {
         }
     }
     
-    static func didReceiveFromPeer(_ data: Data, from peerId: String) {
+    static func didReceiveFromPeer(_ data: Data, from peerId: String, isUDP: Bool = false) {
         guard let voip = try? Voip.parseFrom(data:data) else {
-            print("Could not deserialize voip")
+            print("\(isUDP ? "[UDP]" : "[TCP]") Could not deserialize voip")
             return
         }
         
         if voip.which != .av {
-            print("read \(data.count) bytes for \(voip.which) from \(peerId)")
+            print("\(isUDP ? "[UDP]" : "[TCP]") read \(data.count) bytes for \(voip.which) from \(peerId)")
         }
         
         switch voip.which {
