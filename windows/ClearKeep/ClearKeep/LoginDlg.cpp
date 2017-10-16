@@ -14,11 +14,10 @@ IMPLEMENT_DYNAMIC(CLoginDlg, CDialogEx)
 
 CLoginDlg::CLoginDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_LOGIN, pParent)
+	, m_strHost(_T(""))
+	, m_strPort(_T(""))
 {
 	pMainDlg = (CClearKeepDlg*)AfxGetMainWnd();
-
-	//SetDlgItemText(IDC_ED_USERNAME, _T("minh"));
-	//SetDlgItemText(IDC_ED_PW, _T("matkhau"));
 }
 
 CLoginDlg::~CLoginDlg()
@@ -30,6 +29,8 @@ void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_ED_USERNAME, m_UserNameCtrl);
 	DDX_Control(pDX, IDC_ED_PW, m_PasswordCtrl);
+	DDX_Text(pDX, IDC_ED_HOST, m_strHost);
+	DDX_Text(pDX, IDC_ED_PORT, m_strPort);
 }
 
 
@@ -37,8 +38,13 @@ BOOL CLoginDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	
-	SetDlgItemText(IDC_ED_USERNAME, _T("minh"));
+	SetDlgItemText(IDC_ED_USERNAME, _T("canh"));
 	SetDlgItemText(IDC_ED_PW, _T("xxx"));
+	SetDlgItemText(IDC_ED_HOST, _T("192.168.2.179"));
+	SetDlgItemText(IDC_ED_PORT, _T("8000"));
+	
+	nShowHost = SW_HIDE;
+	doShowHideHost(nShowHost);
 	return TRUE;
 }
 
@@ -47,6 +53,7 @@ BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(IDC_BT_REGISTER, &CLoginDlg::OnBnClickedBtRegister)
 	ON_BN_CLICKED(IDCANCEL, &CLoginDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_BT_SHOW_HOST, &CLoginDlg::OnBnClickedBtShowHost)
 END_MESSAGE_MAP()
 
 
@@ -172,4 +179,28 @@ void CLoginDlg::OnBnClickedCancel()
 {
 	// TODO: Add your control notification handler code here
 	CDialogEx::OnCancel();
+}
+
+
+
+void CLoginDlg::doShowHideHost(int nShow)
+{
+	GetDlgItem(IDC_ST_HOST)->ShowWindow(nShow);
+	GetDlgItem(IDC_ST_PORT)->ShowWindow(nShow);
+	GetDlgItem(IDC_GROUP_HOST)->ShowWindow(nShow);
+	GetDlgItem(IDC_ED_PORT)->ShowWindow(nShow);
+	GetDlgItem(IDC_ED_HOST)->ShowWindow(nShow);
+}
+
+
+void CLoginDlg::OnBnClickedBtShowHost()
+{
+	if (nShowHost == SW_HIDE)
+	{
+		nShowHost = SW_SHOW;
+	}
+	else
+		nShowHost = SW_HIDE;
+
+	doShowHideHost(nShowHost);
 }

@@ -7,7 +7,8 @@
 #include "LoginDlg.h"
 #include "afxcmn.h"
 #include "afxwin.h"
-
+#include "ContactDlg.h"
+#include "MyMfcListCtrl.h"
 
 // CClearKeepDlg dialog
 class CClearKeepDlg : public CDialogEx
@@ -46,6 +47,8 @@ public:
 // Implementation
 protected:
 	HICON m_hIcon;
+	// Current index of peer is displayed
+	int nCurrentIndex;
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
@@ -60,8 +63,25 @@ protected:
 	void doLoginProcess();
 	CLoginDlg *m_LoginDlg;
 
+	// Init tabcontrol of contact list
 	void InitTabContact();
+
+	// Work with chat box
+	void doShowHideChatBox(int nOpt);
+	// Load peer information when selected
+	void LoadPeerInfo(int nIndex);
+	// Load contact to list
+	void doLoadContactToList();
+
+	// Process with incomming message
+	static void incommingMessage(LPVOID p, int nMsgType);
+	
+
 public:
 	afx_msg void OnClose();
-	CListBox m_ContactListCtrl;
+	CListCtrl m_ContactListCtrl;
+	afx_msg void OnBnClickedBtSend();
+	afx_msg void OnBnClickedBtAddCt();
+	afx_msg void OnNMClickListContact(NMHDR *pNMHDR, LRESULT *pResult);
+	CString m_strInputMsg;
 };

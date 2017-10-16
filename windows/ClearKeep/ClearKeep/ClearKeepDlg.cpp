@@ -51,6 +51,7 @@ END_MESSAGE_MAP()
 
 CClearKeepDlg::CClearKeepDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_CLEARKEEP_DIALOG, pParent)
+	, m_strInputMsg(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	
@@ -60,6 +61,7 @@ void CClearKeepDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST_CONTACT, m_ContactListCtrl);
+	DDX_Text(pDX, IDC_ED_INPUT, m_strInputMsg);
 }
 
 BEGIN_MESSAGE_MAP(CClearKeepDlg, CDialogEx)
@@ -67,6 +69,9 @@ BEGIN_MESSAGE_MAP(CClearKeepDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CLOSE()
+	ON_BN_CLICKED(IDC_BT_SEND, &CClearKeepDlg::OnBnClickedBtSend)
+	ON_BN_CLICKED(IDC_BT_ADD_CT, &CClearKeepDlg::OnBnClickedBtAddCt)
+	ON_NOTIFY(NM_CLICK, IDC_LIST_CONTACT, &CClearKeepDlg::OnNMClickListContact)
 END_MESSAGE_MAP()
 
 
@@ -87,12 +92,16 @@ int CClearKeepDlg::Init()
 	// Init logging to trace all information
 	InitLogging();
 
-	
+	InitTabContact();
+	nCurrentIndex = -1; // None peer is displayed
 
 	// Init Themis class
 	m_Themis = CThemis::GetSingleTon();
 	m_LoginDlg = new CLoginDlg();
 
+	//Setting callback function
+	m_Themis->doSetCallbackFunction(this, incommingMessage);
+	
 	// if login return fail, app will exit or request register
 	if (!CallLogin())
 	{
@@ -252,25 +261,130 @@ void CClearKeepDlg::doLoginProcess()
 	SetDlgItemText(IDC_MAIN_USERNAME, strName);
 	CComboBox* pStatus = (CComboBox*)GetDlgItem(IDC_MAIN_STATUS);
 	pStatus->SetCurSel(AccountStatus::status_Online);
+	// set avatar nua
 
-
-	// Contact list loading
-	InitTabContact();
-
+	// Hide button and peer avatar, status
+	doShowHideChatBox(SW_HIDE); //will show when contact peer is selected
 }
 
 void CClearKeepDlg::InitTabContact()
 {
+	LVCOLUMN lvColumn;
+
+	lvColumn.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
+	lvColumn.fmt = LVCFMT_LEFT;
+	lvColumn.cx = 100;
+	lvColumn.pszText = _T("Contact Name");
+	m_ContactListCtrl.InsertColumn(0, &lvColumn);
+
+	lvColumn.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
+	lvColumn.fmt = LVCFMT_CENTER;
+	lvColumn.cx = 70;
+	lvColumn.pszText = _T("Status");
+	m_ContactListCtrl.InsertColumn(1, &lvColumn);
+}
+
+void CClearKeepDlg::doShowHideChatBox(int nOpt)
+{
+	GetDlgItem(IDC_BT_ACALL)->ShowWindow(nOpt);
+	GetDlgItem(IDC_BT_VCALL)->ShowWindow(nOpt);
+	GetDlgItem(IDC_PEER_AVATAR)->ShowWindow(nOpt);
+	GetDlgItem(IDC_PEER_NAME)->ShowWindow(nOpt);
+	GetDlgItem(IDC_PEER_STATUS)->ShowWindow(nOpt);
+	GetDlgItem(IDC_BT_SEND)->ShowWindow(nOpt);
+}
+
+void CClearKeepDlg::LoadPeerInfo(int nIndex)
+{
+	if (nIndex >= m_Themis->m_ListContact.size()) // Error if index greater than size of list contact
+	{
+		return;
+	}
+	CString strPeerName(m_Themis->m_ListContact.at(nIndex).strName.c_str());
+	SetDlgItemText(IDC_PEER_NAME, strPeerName);
+	bool bIsOnline = m_Themis->m_ListContact.at(nIndex).nStatus;
+	CComboBox* pStatus = (CComboBox*)GetDlgItem(IDC_PEER_STATUS);
+	if (bIsOnline)
+		pStatus->SetCurSel(AccountStatus::status_Online);
+	else
+		pStatus->SetCurSel(AccountStatus::status_Offline);
+
+	doShowHideChatBox(SW_SHOW);
+	// Set avatar nua
+}
+
+void CClearKeepDlg::doLoadContactToList()
+{
+	m_ContactListCtrl.DeleteAllItems();
+
 	if (m_Themis->m_ListContact.size() > 0)
 	{
 		for (unsigned i = 0; i < m_Themis->m_ListContact.size(); i++)
 		{
-			Contact pCtTemp = m_Themis->m_ListContact.at(i);
-			CString strAccName(pCtTemp.name().c_str());
-			m_ContactListCtrl.AddString(strAccName);
+			CString strAccName(m_Themis->m_ListContact.at(i).strName.c_str());
+			m_ContactListCtrl.InsertItem(i, strAccName);
+			m_ContactListCtrl.SetItemText(i, 0, strAccName);
+			CString strStatus = _T("status");
+			if (m_Themis->m_ListContact.at(i).nStatus)
+			{
+				strStatus = _T("online");
+			}
+			else
+			{
+				strStatus = _T("offline");
+			}
+			m_ContactListCtrl.SetItemText(i, 1, strStatus);
 		}
 	}
 }
+
+void CClearKeepDlg::incommingMessage(LPVOID p, int nMsgType)
+{
+	CClearKeepDlg* pThis = (CClearKeepDlg*)p;
+	Wire::Which nWhich = (Wire_Which)nMsgType;
+	switch (nWhich)
+	{
+		case Wire::LOGIN:
+			break;
+		case Wire::CONTACTS:
+		{
+			pThis->doLoadContactToList();
+		}
+		break;
+		case Wire::PRESENCE:
+		{
+			pThis->doLoadContactToList(); //sua cai nay thanh doi status thoi
+		}
+		break;
+		case Wire::STORE:
+			AfxMessageBox(_T("STORE"), IDOK);
+			break;
+		case Wire::LOAD:
+			AfxMessageBox(_T("LOAD"), IDOK);
+			break;
+		case Wire::PUBLIC_KEY:
+			//AfxMessageBox(_T("PUBLIC_KEY"), IDOK);
+			break;
+		case Wire::PUBLIC_KEY_RESPONSE:
+			//AfxMessageBox(_T("PUBLIC_KEY_RESPONSE"), IDOK);
+			break;
+		case Wire::HANDSHAKE:
+			//AfxMessageBox(_T("HANDSHAKE"), IDOK);
+			break;
+		case Wire::PAYLOAD:
+			AfxMessageBox(_T("PAYLOAD"), IDOK);
+			break;
+		case Wire::LOGIN_RESPONSE:
+			AfxMessageBox(_T("LOGIN_RESPONSE"), IDOK);
+			break;
+		case Wire::PLAIN_TEXT:
+			AfxMessageBox(_T("PLAIN_TEXT"), IDOK);
+			break;
+		default:
+			break;
+	}
+}
+
 
 void CClearKeepDlg::OnClose()
 {
@@ -283,4 +397,61 @@ void CClearKeepDlg::OnClose()
 	}
 
 	CDialogEx::OnClose();
+}
+
+
+void CClearKeepDlg::OnBnClickedBtSend()
+{
+	UpdateData();
+	// Make new session chat or send text message
+	m_Themis->doSendPublicKeyToClient(nCurrentIndex);
+	CT2CA pszMsg(m_strInputMsg);
+	string strMsg(pszMsg);
+	//m_Themis->doSendMsgToClient(nCurrentIndex, strMsg);
+}
+
+
+void CClearKeepDlg::OnBnClickedBtAddCt()
+{
+	CContactDlg pContactDlg;
+	
+	if (pContactDlg.DoModal() == IDOK)
+	{
+		CT2CA pszName(pContactDlg.m_strName);
+		CT2CA pszId(pContactDlg.m_strId);
+		string strNewCt(pszName);
+		string strIdct(pszId);
+		Contact pTemp;
+		pTemp.set_name(strNewCt);
+		pTemp.set_id(strIdct);
+
+		if (m_Themis->doAddContactToList(pTemp) == 0)
+		{
+			doLoadContactToList();
+		}
+		m_Themis->doSendContactList();
+	}
+}
+
+
+void CClearKeepDlg::OnNMClickListContact(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	if (m_Themis->m_ListContact.size() > 0) // Contact list is zero
+	{
+		int nIndex = m_ContactListCtrl.GetNextItem(-1, LVNI_SELECTED);
+		if (nIndex == -1)
+		{
+			nIndex = m_ContactListCtrl.GetItemCount() - 1;
+			m_ContactListCtrl.SetItemState(nIndex, LVIS_SELECTED, LVIS_SELECTED);
+		}
+
+		if (nCurrentIndex != nIndex)
+		{
+			LoadPeerInfo(nIndex);
+			nCurrentIndex = nIndex;
+		}
+	}
+	*pResult = 0;
 }

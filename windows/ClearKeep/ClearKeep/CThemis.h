@@ -21,7 +21,6 @@ using easywsclient::WebSocket;
 #include <secure_keygen.hpp>
 #include <secure_cell.hpp>
 #include <secure_message.hpp>
-// Current Error [9/18/2017 Canhnh]
 #include <secure_session.hpp>  
 #include <secure_rand.hpp>
 
@@ -34,16 +33,19 @@ using easywsclient::WebSocket;
 using namespace std;
 
 // tinythread
-#include "Includes/tinythread/tinythread.h"
-using namespace tthread;
+//#include "Includes/tinythread/tinythread.h"
+//using namespace tthread;
+
+#include <functional>
+
 
 enum AccountStatus
 {
-	status_busy,
-	status_away,
-	status_visible,
-	status_Offline,
 	status_Online,
+	status_Offline,
+	status_visible,
+	status_away,
+	status_busy
 };
 
 enum LOGIN_STATUS {
@@ -54,7 +56,20 @@ enum LOGIN_STATUS {
 	login_unknow_error
 };
 
+struct _List_Contact 
+{
+	_List_Contact() = default;
+	_List_Contact(string name, string id, int status, string key)
+		: strName(name), strId(id), strPrKey(key), nStatus(status), psession(NULL) {};
+	string strName;
+	string strId;
+	int nStatus;
+	string strPrKey;
+	themispp::secure_session_t* psession;
+};
 
+// Callback function pointer.
+typedef void(*CallbackFunctionPtr)(LPVOID, int);
 
 class CThemis
 {
@@ -65,10 +80,6 @@ public:
 	// Singleton
 	static CThemis *SingleTon;
 	static CThemis* GetSingleTon();
-
-	// Varial of msg [9/20/2017 Canhnh]
-	Login pLogin;
-	Wire pWire;
 
 	// Create TcpSocket to implement connection with server [9/21/2017 Canhnh]
 	LOGIN_STATUS doConnnection();
@@ -82,6 +93,7 @@ public:
 
 	// Generade pair key [9/20/2017 Canhnh]
 	void createPairKey();
+	// default using ECC - type = 0
 	void setTypeOfEnc(int type) { nType = type; };
 	void setPort(int port) { nPort = port; };
 	void setHost(int host) { nHost = host; };
@@ -91,10 +103,43 @@ public:
 	bool SendMsg(string strMsg);
 	static void ProcessCommandThread(void* lpUser);
 	static int ProcessCommand(const std::string & message);
-	thread* m_SocketThread;
+	
 
 	// Data
-	vector<Contact> m_ListContact;
+	vector<_List_Contact> m_ListContact;
+
+	// Create chatting session
+	void doProcessingPublickey(string strFrom, string plKey);
+	int doCreateChatSession(int nContactIndex);
+	int doSendPublicKeyToClient(int nContactIndex);
+	int doSendPublicKeyResponseToClient(string strTo);
+	int doSendMsgToClient(int nContactIndex, string strText);
+	int doReceiveHandShake(string strFrom, string strPayload);
+	int doSendHandShake(string strFrom, string session_init_data);
+
+	// Send list contact to server
+	int doSendContactList();
+	int doAddContactToList(Contact pContact);
+	int getIndexByName(string strName);
+	
+	// Connect Callback Function to handle message incoming
+	void doSetCallbackFunction(LPVOID pClassHolder, CallbackFunctionPtr cb_Message) { m_cb_Message = cb_Message; m_pHolder = pClassHolder; };
+	
+
+	// store session id
+	void setSessionId(string strId) {
+		strSessionId = strId;
+	};
+	const string getSessionId() { return strSessionId; };
+
+	// Create Session_Secure to use
+	int doCreateSecureSession(string strPeerID, string strPeerPlkey);
+
+	// create to test
+	vector<uint8_t> getPublicKey() { return plKey; };
+	vector<uint8_t> getPrivateKey() { return prKey; };
+	const string getAccount() { return strAccount; };
+	void doCheck(bool bValue);
 
 protected:
 	std::vector<uint8_t> plKey;
@@ -108,8 +153,15 @@ protected:
 	DWORD myThreadID;
 	HANDLE myHandle;
 
-	//websocket
+	// websocket
 	WebSocket::pointer ws;
+	string strSessionId;
+	string strAccount;
+
+	// For callback function
+	void *m_pHolder;
+	CallbackFunctionPtr m_cb_Message;
+	
 };
 
 #endif

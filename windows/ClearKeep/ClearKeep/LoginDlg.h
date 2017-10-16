@@ -40,4 +40,10 @@ public:
 	afx_msg void OnBnClickedOk();
 	CEdit m_UserNameCtrl;
 	CEdit m_PasswordCtrl;
+	CString m_strHost;
+	CString m_strPort;
+
+	void doShowHideHost(int nShow);
+	afx_msg void OnBnClickedBtShowHost();
+	int nShowHost;
 };
