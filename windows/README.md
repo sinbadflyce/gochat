@@ -36,7 +36,8 @@ Note: Libraries need to include:
 III. Test:
 ----------------------------
 - The folder "windows\ClearKeep\Themis\x64\Debug" includes executable files that had built for Windows 10.
+- Visual C++ Redistributable for Visual Studio 2013 will needed (maybe).
+https://www.microsoft.com/en-us/download/details.aspx?id=40784
 - Visual C++ Redistributable for Visual Studio 2015 will needed.
-
 https://www.microsoft.com/en-us/download/details.aspx?id=48145
-
+Note: Not be tested in x86 yet.
