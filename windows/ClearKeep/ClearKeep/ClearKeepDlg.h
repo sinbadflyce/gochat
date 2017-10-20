@@ -76,6 +76,8 @@ protected:
 	// Process with incomming message
 	static void incommingMessage(LPVOID p, int nMsgType);
 	
+	// Load chat history from database store
+	int doLoadChatHistory();
 
 public:
 	afx_msg void OnClose();
@@ -84,4 +86,5 @@ public:
 	afx_msg void OnBnClickedBtAddCt();
 	afx_msg void OnNMClickListContact(NMHDR *pNMHDR, LRESULT *pResult);
 	CString m_strInputMsg;
+	CString m_ChatZoom;
 };

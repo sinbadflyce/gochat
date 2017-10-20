@@ -40,9 +40,10 @@ BOOL CLoginDlg::OnInitDialog()
 	
 	SetDlgItemText(IDC_ED_USERNAME, _T("canh"));
 	SetDlgItemText(IDC_ED_PW, _T("xxx"));
-	SetDlgItemText(IDC_ED_HOST, _T("192.168.2.179"));
+	SetDlgItemText(IDC_ED_HOST, _T("192.168.0.105"));
 	SetDlgItemText(IDC_ED_PORT, _T("8000"));
-	
+	doSetHost();
+
 	nShowHost = SW_HIDE;
 	doShowHideHost(nShowHost);
 	return TRUE;
@@ -54,6 +55,7 @@ BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BT_REGISTER, &CLoginDlg::OnBnClickedBtRegister)
 	ON_BN_CLICKED(IDCANCEL, &CLoginDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDC_BT_SHOW_HOST, &CLoginDlg::OnBnClickedBtShowHost)
+	ON_BN_CLICKED(IDC_SET_HOST, &CLoginDlg::OnBnClickedSetHost)
 END_MESSAGE_MAP()
 
 
@@ -190,6 +192,7 @@ void CLoginDlg::doShowHideHost(int nShow)
 	GetDlgItem(IDC_GROUP_HOST)->ShowWindow(nShow);
 	GetDlgItem(IDC_ED_PORT)->ShowWindow(nShow);
 	GetDlgItem(IDC_ED_HOST)->ShowWindow(nShow);
+	GetDlgItem(IDC_SET_HOST)->ShowWindow(nShow);
 }
 
 
@@ -203,4 +206,22 @@ void CLoginDlg::OnBnClickedBtShowHost()
 		nShowHost = SW_HIDE;
 
 	doShowHideHost(nShowHost);
+}
+
+
+void CLoginDlg::OnBnClickedSetHost()
+{
+	doSetHost();
+}
+
+void CLoginDlg::doSetHost()
+{
+	CString strTemp;
+	GetDlgItemText(IDC_ED_HOST, strTemp);
+	CT2CA pszMsg1(strTemp);
+	string strNewHost(pszMsg1);
+	pMainDlg->m_Themis->setHost(strNewHost);
+	GetDlgItemText(IDC_ED_PORT, strTemp);
+	CT2CA pszMsg2(strTemp); string strNewPort(pszMsg2);
+	pMainDlg->m_Themis->setPort(strNewPort);
 }

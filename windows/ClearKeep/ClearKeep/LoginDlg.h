@@ -46,4 +46,6 @@ public:
 	void doShowHideHost(int nShow);
 	afx_msg void OnBnClickedBtShowHost();
 	int nShowHost;
+	afx_msg void OnBnClickedSetHost();
+	void doSetHost();
 };

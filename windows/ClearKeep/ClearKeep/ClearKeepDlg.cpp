@@ -52,6 +52,7 @@ END_MESSAGE_MAP()
 CClearKeepDlg::CClearKeepDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_CLEARKEEP_DIALOG, pParent)
 	, m_strInputMsg(_T(""))
+	, m_ChatZoom(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	
@@ -62,6 +63,7 @@ void CClearKeepDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST_CONTACT, m_ContactListCtrl);
 	DDX_Text(pDX, IDC_ED_INPUT, m_strInputMsg);
+	DDX_Text(pDX, IDC_CHAT_ROOM, m_ChatZoom);
 }
 
 BEGIN_MESSAGE_MAP(CClearKeepDlg, CDialogEx)
@@ -353,7 +355,7 @@ void CClearKeepDlg::incommingMessage(LPVOID p, int nMsgType)
 		break;
 		case Wire::PRESENCE:
 		{
-			pThis->doLoadContactToList(); //sua cai nay thanh doi status thoi
+			pThis->doLoadContactToList(); 
 		}
 		break;
 		case Wire::STORE:
@@ -372,8 +374,12 @@ void CClearKeepDlg::incommingMessage(LPVOID p, int nMsgType)
 			//AfxMessageBox(_T("HANDSHAKE"), IDOK);
 			break;
 		case Wire::PAYLOAD:
-			AfxMessageBox(_T("PAYLOAD"), IDOK);
+		{
+			//AfxMessageBox(_T("PAYLOAD"), IDOK);
+			// Load chat history from database store
+			pThis->doLoadChatHistory();
 			break;
+		}
 		case Wire::LOGIN_RESPONSE:
 			AfxMessageBox(_T("LOGIN_RESPONSE"), IDOK);
 			break;
@@ -385,6 +391,21 @@ void CClearKeepDlg::incommingMessage(LPVOID p, int nMsgType)
 	}
 }
 
+
+int CClearKeepDlg::doLoadChatHistory()
+{
+	// load chat history of current index
+	_Messenger_Content _CurrentContent;
+	_CurrentContent = m_Themis->doGetChatContentOfContact((m_Themis->getContactNameByIndex(nCurrentIndex)));
+	CString strFrom(m_Themis->getContactNameByIndex(nCurrentIndex).c_str());
+	CString strNewline(_CurrentContent.strContent.c_str());
+	CString strTime(_CurrentContent.strTimestamp.c_str());
+	m_ChatZoom += _T("\r\n") + strFrom + _T(" < ") + strTime + _T(" >: ") + strNewline;
+	
+	SetDlgItemText(IDC_CHAT_ROOM, m_ChatZoom);
+
+	return 0;
+}
 
 void CClearKeepDlg::OnClose()
 {
@@ -402,12 +423,28 @@ void CClearKeepDlg::OnClose()
 
 void CClearKeepDlg::OnBnClickedBtSend()
 {
-	UpdateData();
+	// check if offline
+	if (m_Themis->getContactByIndex(nCurrentIndex)->nStatus != 1)
+	{
+		return;
+	}
+
+	
 	// Make new session chat or send text message
-	m_Themis->doSendPublicKeyToClient(nCurrentIndex);
+	
 	CT2CA pszMsg(m_strInputMsg);
 	string strMsg(pszMsg);
-	//m_Themis->doSendMsgToClient(nCurrentIndex, strMsg);
+	m_Themis->doProcessSendMsg(nCurrentIndex, strMsg);
+
+	CString strName(strUsername.c_str());
+	CString strTime(m_Themis->currentDateTime().c_str());
+	m_ChatZoom += _T("\r\n") + strName + _T(" < ") + strTime + _T(" >: ") + m_strInputMsg;
+
+	SetDlgItemText(IDC_CHAT_ROOM, m_ChatZoom);
+
+	UpdateData();
+
+	SetDlgItemText(IDC_ED_INPUT, _T(""));
 }
 
 

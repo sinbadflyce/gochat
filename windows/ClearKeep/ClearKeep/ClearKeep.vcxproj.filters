@@ -93,6 +93,12 @@
     <ClInclude Include="..\Themis\src\wrappers\themis\themispp\secure_session.hpp">
       <Filter>Themispp</Filter>
     </ClInclude>
+    <ClInclude Include="ContactDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMfcListCtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClearKeep.cpp">
@@ -127,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="Includes\tinythread\tinythread.cpp">
       <Filter>TinyThread</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMfcListCtrl.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
